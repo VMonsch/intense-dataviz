@@ -3,6 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import { WasabiService } from './wasabi.service';
 
 am4core.useTheme(am4themes_animated);
 
@@ -14,10 +15,10 @@ am4core.useTheme(am4themes_animated);
 export class AppComponent implements OnDestroy, AfterViewInit {
   private chart: am4charts.XYChart;
 
-  constructor(private zone: NgZone) {}
+  constructor(private zone: NgZone, private wasabiService: WasabiService) {}
 
   ngAfterViewInit() {
-      this.zone.runOutsideAngular(() => {
+  this.zone.runOutsideAngular(() => {
         const chart = am4core.create('chartdiv', am4charts.XYChart);
 
         chart.paddingRight = 20;
@@ -51,6 +52,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         this.chart = chart;
     });
+
+  this.getHobbies();
   }
 
   ngOnDestroy() {
@@ -58,6 +61,13 @@ export class AppComponent implements OnDestroy, AfterViewInit {
       if (this.chart) {
         this.chart.dispose();
       }
+    });
+  }
+
+  getHobbies() {
+    this.wasabiService.getHobbies().then(response => {
+      console.log(response.data);
+
     });
   }
 }
