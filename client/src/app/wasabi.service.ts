@@ -10,7 +10,7 @@ export class WasabiService {
   constructor(private http: HttpClient) {}
   private root = 'https://wasabi.i3s.unice.fr/';
 
-  getSearchWithAutoCompletion(searchText): Observable {
+  getSearchWithAutoCompletion(searchText): Observable<any> {
     const url = this.root + 'search/fulltext/' + searchText;
     return this.http.get(url);
   }

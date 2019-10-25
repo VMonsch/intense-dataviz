@@ -2,9 +2,11 @@ import { Component, NgZone, AfterViewInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import * as am4plugins_timeline from '@amcharts/amcharts4/plugins/timeline';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import { WasabiService } from './wasabi.service';
+import {$} from 'protractor';
+import {Observable, of} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 
 am4core.useTheme(am4themes_animated);
 
@@ -14,35 +16,28 @@ am4core.useTheme(am4themes_animated);
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy, AfterViewInit {
-  private chart: am4charts.XYChart;
-
   constructor(private zone: NgZone, private wasabiService: WasabiService) {}
+  private chart: am4charts.XYChart;
+  searchText: string;
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term =>
+        this.wasabiService.getSearchWithAutoCompletion(term).pipe(
+          catchError(() => {
+            return of([]);
+          }))
+      ))
 
   ngAfterViewInit() {
   this.zone.runOutsideAngular(() => {
-    this.initXYDemoChart('demo-chart');
-    this.initColumnChart('column-chart');
-    });
-
-  this.getHobbies();
-  }
-
-  ngOnDestroy() {
-    this.zone.runOutsideAngular(() => {
-      if (this.chart) {
-        this.chart.dispose();
-      }
+        this.initDemoChart('demo-chart');
+        this.initColumnChart('column-chart');
     });
   }
 
-  getHobbies() {
-    this.wasabiService.getHobbies().then(response => {
-      console.log(response.data);
-
-    });
-  }
-
-  initXYDemoChart(divName: string) {
+  initDemoChart(divName: string) {
     const chart = am4core.create(divName, am4charts.XYChart);
 
     chart.paddingRight = 20;
@@ -76,11 +71,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
     this.chart = chart;
   }
-
   initColumnChart(divName: string) {
     const chart = am4core.create(divName, am4charts.XYChart);
 
-// Add data
     chart.data = [{
       name: 'John',
       points: 35654,
@@ -103,7 +96,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
       bullet: 'https://www.amcharts.com/lib/images/faces/E01.png'
     }];
 
-// Create axes
     const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'name';
     categoryAxis.renderer.grid.template.disabled = true;
@@ -117,13 +109,10 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     valueAxis.renderer.labels.template.disabled = true;
     valueAxis.min = 0;
 
-// Do not crop bullets
     chart.maskBullets = false;
 
-// Remove padding
     chart.paddingBottom = 0;
 
-// Create series
     const series = chart.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = 'points';
     series.dataFields.categoryX = 'name';
@@ -133,7 +122,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     series.columns.template.column.cornerRadiusTopRight = 15;
     series.columns.template.tooltipText = '{categoryX}: [bold]{valueY}[/b]';
 
-// Add bullets
     const bullet = series.bullets.push(new am4charts.Bullet());
     const image = bullet.createChild(am4core.Image);
     image.horizontalCenter = 'middle';
@@ -145,4 +133,13 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     image.propertyFields.fill = 'color';
     image.filters.push(new am4core.DropShadowFilter());
   }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      if (this.chart) {
+        this.chart.dispose();
+      }
+    });
+  }
+
 }
