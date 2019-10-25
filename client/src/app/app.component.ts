@@ -22,7 +22,10 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     private zone: NgZone,
     private wasabiService: WasabiService,
     private router: Router) {}
-  private chart: am4charts.XYChart;
+
+  private demoChart: am4charts.XYChart;
+  private columnChart: am4charts.XYChart;
+
   searchText: string;
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -39,15 +42,15 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
   this.zone.runOutsideAngular(() => {
-        this.initDemoChart('demo-chart');
         this.initColumnChart('column-chart');
-    });
+        this.initDemoChart('demo-chart');
+  });
   }
 
   initDemoChart(divName: string) {
-    const chart = am4core.create(divName, am4charts.XYChart);
+    this.demoChart = am4core.create(divName, am4charts.XYChart);
 
-    chart.paddingRight = 20;
+    this.demoChart.paddingRight = 20;
 
     const data = [];
     let visits = 10;
@@ -56,45 +59,50 @@ export class AppComponent implements OnDestroy, AfterViewInit {
       data.push({ date: new Date(2018, 0, i), name: 'name' + i, value: visits });
     }
 
-    chart.data = data;
+    this.demoChart.data = data;
 
-    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    const dateAxis = this.demoChart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.location = 0;
 
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = this.demoChart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.tooltip.disabled = true;
     valueAxis.renderer.minWidth = 35;
 
-    const series = chart.series.push(new am4charts.LineSeries());
+    const series = this.demoChart.series.push(new am4charts.LineSeries());
     series.dataFields.dateX = 'date';
     series.dataFields.valueY = 'value';
 
     series.tooltipText = '{valueY.value}';
-    chart.cursor = new am4charts.XYCursor();
+    this.demoChart.cursor = new am4charts.XYCursor();
 
     const scrollbarX = new am4charts.XYChartScrollbar();
     scrollbarX.series.push(series);
-    chart.scrollbarX = scrollbarX;
-
-    this.chart = chart;
+    this.demoChart.scrollbarX = scrollbarX;
   }
 
   initColumnChart(divName: string) {
-    const chart = am4core.create(divName, am4charts.XYChart);
+    this.columnChart = am4core.create(divName, am4charts.XYChart);
+    // this.drawColumnChart();
+
     this.wasabiService.getArtistsWithMostAlbums().subscribe(data => {
-      data.forEach(artist => {
+      this.drawColumnChart(data);
+    });
+  }
 
+  drawColumnChart(data: Array<any> = []) {
+    // this.columnChart.dispose();
+    this.columnChart.data = [];
 
-        chart.data.push({
-          name: artist.name,
-          points: artist.sum,
-          color: chart.colors.next(),
-          bullet: this.getRandomFace()
-        });
+    data.forEach(artist => {
+      this.columnChart.data.push({
+        name: artist.name,
+        points: artist.sum,
+        color: this.columnChart.colors.next(),
+        bullet: this.getRandomFace()
       });
     });
 
-    const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    const categoryAxis = this.columnChart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'name';
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.minGridDistance = 30;
@@ -102,16 +110,16 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     categoryAxis.renderer.labels.template.fill = am4core.color('#fff');
     categoryAxis.renderer.labels.template.fontSize = 20;
 
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = this.columnChart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.strokeDasharray = '4,4';
     valueAxis.renderer.labels.template.disabled = true;
     valueAxis.min = 0;
 
-    chart.maskBullets = false;
+    this.columnChart.maskBullets = false;
 
-    chart.paddingBottom = 0;
+    this.columnChart.paddingBottom = 0;
 
-    const series = chart.series.push(new am4charts.ColumnSeries());
+    const series = this.columnChart.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = 'points';
     series.dataFields.categoryX = 'name';
     series.columns.template.propertyFields.fill = 'color';
@@ -144,8 +152,11 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.zone.runOutsideAngular(() => {
-      if (this.chart) {
-        this.chart.dispose();
+      if (this.demoChart) {
+        this.demoChart.dispose();
+      }
+      if (this.columnChart) {
+        this.columnChart.dispose();
       }
     });
   }
