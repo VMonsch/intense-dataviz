@@ -4,12 +4,10 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import { WasabiService } from './wasabi.service';
-import {$} from 'protractor';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {Artist} from './model/artist';
-import {string} from '@amcharts/amcharts4/core';
 
 am4core.useTheme(am4themes_animated);
 
