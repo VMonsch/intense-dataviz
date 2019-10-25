@@ -8,18 +8,22 @@ import { AngularFireModule } from 'angularfire2';
 import { HttpClientModule } from '@angular/common/http';
 import { WasabiService } from './wasabi.service';
 import {FormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
+import { ArtistComponent } from './artist/artist.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ArtistComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    RouterModule,
   ],
   providers: [WasabiService],
   bootstrap: [AppComponent]

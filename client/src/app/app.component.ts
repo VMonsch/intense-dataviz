@@ -7,6 +7,8 @@ import { WasabiService } from './wasabi.service';
 import {$} from 'protractor';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {Artist} from './model/artist';
 import {string} from '@amcharts/amcharts4/core';
 
 am4core.useTheme(am4themes_animated);
@@ -18,7 +20,10 @@ am4core.useTheme(am4themes_animated);
 })
 
 export class AppComponent implements OnDestroy, AfterViewInit {
-  constructor(private zone: NgZone, private wasabiService: WasabiService) {}
+  constructor(
+    private zone: NgZone,
+    private wasabiService: WasabiService,
+    private router: Router) {}
   private chart: am4charts.XYChart;
   searchText: string;
   search = (text$: Observable<string>) =>
@@ -31,6 +36,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             return of([]);
           }))
       ))
+
+  formatter = (result: Artist) => result.name;
 
   ngAfterViewInit() {
   this.zone.runOutsideAngular(() => {
@@ -143,6 +150,12 @@ export class AppComponent implements OnDestroy, AfterViewInit {
         this.chart.dispose();
       }
     });
+  }
+
+  onSelectSearch(item) {
+    console.log(item);
+    this.router.navigate(['/artist', item.name]);
+
   }
 
 }
