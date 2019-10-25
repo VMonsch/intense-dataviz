@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,16 +8,10 @@ import { HttpClient } from '@angular/common/http';
 export class WasabiService {
 
   constructor(private http: HttpClient) {}
+  private root = 'https://wasabi.i3s.unice.fr/';
 
-  private url = 'https://my-json-server.typicode.com/micbuffa/hobbies/db';
-
-
-  getHobbies(): Promise<any> {
-
-    // on va chercher par GET le fichier JSON sur un REST endpoint
-
-    return this.http.get(this.url)
-      .toPromise();
-
+  getSearchWithAutoCompletion(searchText): Observable {
+    const url = this.root + 'search/fulltext/' + searchText;
+    return this.http.get(url);
   }
 }

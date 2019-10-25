@@ -4,6 +4,9 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import { WasabiService } from './wasabi.service';
+import {$} from 'protractor';
+import {Observable, of} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 
 am4core.useTheme(am4themes_animated);
 
@@ -13,9 +16,19 @@ am4core.useTheme(am4themes_animated);
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy, AfterViewInit {
-  private chart: am4charts.XYChart;
-
   constructor(private zone: NgZone, private wasabiService: WasabiService) {}
+  private chart: am4charts.XYChart;
+  searchText: string;
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term =>
+        this.wasabiService.getSearchWithAutoCompletion(term).pipe(
+          catchError(() => {
+            return of([]);
+          }))
+      ))
 
   ngAfterViewInit() {
   this.zone.runOutsideAngular(() => {
@@ -52,8 +65,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
         this.chart = chart;
     });
-
-  this.getHobbies();
   }
 
   ngOnDestroy() {
@@ -64,10 +75,4 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     });
   }
 
-  getHobbies() {
-    this.wasabiService.getHobbies().then(response => {
-      console.log(response.data);
-
-    });
-  }
 }
