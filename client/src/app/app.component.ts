@@ -7,6 +7,7 @@ import { WasabiService } from './wasabi.service';
 import {$} from 'protractor';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
+import {string} from '@amcharts/amcharts4/core';
 
 am4core.useTheme(am4themes_animated);
 
@@ -15,6 +16,7 @@ am4core.useTheme(am4themes_animated);
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnDestroy, AfterViewInit {
   constructor(private zone: NgZone, private wasabiService: WasabiService) {}
   private chart: am4charts.XYChart;
@@ -71,30 +73,21 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
     this.chart = chart;
   }
+
   initColumnChart(divName: string) {
     const chart = am4core.create(divName, am4charts.XYChart);
+    this.wasabiService.getArtistsWithMostAlbums().subscribe(data => {
+      data.forEach(artist => {
 
-    chart.data = [{
-      name: 'John',
-      points: 35654,
-      color: chart.colors.next(),
-      bullet: 'https://www.amcharts.com/lib/images/faces/A04.png'
-    }, {
-      name: 'Damon',
-      points: 65456,
-      color: chart.colors.next(),
-      bullet: 'https://www.amcharts.com/lib/images/faces/C02.png'
-    }, {
-      name: 'Patrick',
-      points: 45724,
-      color: chart.colors.next(),
-      bullet: 'https://www.amcharts.com/lib/images/faces/D02.png'
-    }, {
-      name: 'Mark',
-      points: 13654,
-      color: chart.colors.next(),
-      bullet: 'https://www.amcharts.com/lib/images/faces/E01.png'
-    }];
+
+        chart.data.push({
+          name: artist.name,
+          points: artist.sum,
+          color: chart.colors.next(),
+          bullet: this.getRandomFace()
+        });
+      });
+    });
 
     const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'name';
@@ -132,6 +125,16 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     image.tooltipText = series.columns.template.tooltipText;
     image.propertyFields.fill = 'color';
     image.filters.push(new am4core.DropShadowFilter());
+  }
+
+  getRandomFace() {
+    const characters = 'ABCDEFGHIJKLMNO';
+    const numbers = '12345';
+
+    const randomLetter = characters.charAt(Math.floor(Math.random() * characters.length));
+    const randomNumber = numbers.charAt(Math.floor(Math.random() * numbers.length));
+
+    return 'https://www.amcharts.com/lib/images/faces/' + randomLetter + '0' + randomNumber + '.png';
   }
 
   ngOnDestroy() {
