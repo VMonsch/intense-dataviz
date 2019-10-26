@@ -5,6 +5,7 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Artist} from '../../model/artist';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-nav-bar',
@@ -17,6 +18,7 @@ export class NavBarComponent {
     private wasabiService: WasabiService,
     private router: Router) {}
 
+  searchIcon = faSearch;
   searchText: string;
   search = (text$: Observable<string>) =>
     text$.pipe(

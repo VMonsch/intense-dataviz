@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
 import { WasabiService } from './service/wasabi.service';
 import {FormsModule} from '@angular/forms';
@@ -28,6 +29,7 @@ import { HomepageComponent } from './custom-components/homepage/homepage.compone
     HttpClientModule,
     FormsModule,
     RouterModule,
+    FontAwesomeModule
   ],
   providers: [WasabiService],
   bootstrap: [AppComponent]
