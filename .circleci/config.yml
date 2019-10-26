@@ -6,7 +6,6 @@ jobs:
     - image: circleci/node:12-browsers
     steps:
     - checkout
-
     - restore_cache:
       key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
     - run: npm install '@angular/cli'
