@@ -32,7 +32,7 @@ jobs:
         - "node_modules"
     # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
     # - run: xvfb-run -a npm run e2e -- --no-progress --config=protractor-ci.conf.js
-    - run: cd client && node_modules/.bin/firebase deploy --project $FIREBASE_PROJECT --token $FIREBASE_TOKEN
+    - run: cd client && node_modules/.bin/firebase deploy --token $FIREBASE_TOKEN #--project $FIREBASE_PROJECT
 workflows:
   version: 2
   build_then_deploy:
