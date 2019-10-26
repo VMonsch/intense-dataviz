@@ -4,10 +4,11 @@ import * as firebase from 'firebase';
 import { AppComponent } from './app.component';
 import {ArtistComponent} from './custom-components/artist/artist.component';
 import {NavBarComponent} from './custom-components/nav-bar/nav-bar.component';
+import {HomepageComponent} from './custom-components/homepage/homepage.component';
 
 const routes: Routes = [
   {path: 'artist/:name', component: ArtistComponent},
-  {path: 'home', component: NavBarComponent},
+  {path: 'home', component: HomepageComponent},
   {path: '**', redirectTo : '/home'}];
 
 @NgModule({

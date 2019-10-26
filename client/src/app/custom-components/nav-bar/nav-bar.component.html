@@ -16,18 +16,26 @@
         </div>
       </ng-template>
 
-      <input
-        id="typeahead-focus"
-        type="text"
-        class="form-control"
-        [(ngModel)]="searchText"
-        [ngbTypeahead]="search"
-        #instance="ngbTypeahead"
-        name="searchField"
-        (selectItem)="onSelectSearch($event.item)"
-        [inputFormatter]="formatter"
-        [resultTemplate]="rt"
-      />
+      <div class="input-group">
+        <input
+          id="typeahead-focus"
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchText"
+          [ngbTypeahead]="search"
+          #instance="ngbTypeahead"
+          name="searchField"
+          (selectItem)="onSelectSearch($event.item)"
+          [inputFormatter]="formatter"
+          [resultTemplate]="rt"
+          placeholder="Search"
+        />
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-outline-secondary">
+            <span class="oi oi-magnifying-glass"></span>
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </nav>

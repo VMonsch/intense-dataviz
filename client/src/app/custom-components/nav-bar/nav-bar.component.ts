@@ -11,7 +11,7 @@ import {Artist} from '../../model/artist';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnDestroy, AfterViewInit {
+export class NavBarComponent {
   constructor(
     private zone: NgZone,
     private wasabiService: WasabiService,
