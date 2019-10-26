@@ -1,18 +1,25 @@
+# CircleCI Firebase Deployment Config
 version: 2
 jobs:
   build:
-    working_directory: ~/client
     docker:
-    - image: circleci/node:8-browsers
+    - image: circleci/node:10
+    working_directory: ~/client
     steps:
     - checkout
     - restore_cache:
-        key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
-    - run: npm install -g
+        keys:
+        # Find a cache corresponding to this specific package-lock.json
+        - v1-npm-deps-{{ checksum "package-lock.json" }}
+        # Fallback cache to be used
+        - v1-npm-deps-
+    - run:
+        name: Install Dependencies
+        command: npm install
     - save_cache:
-        key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
+        key: v1-npm-deps-{{ checksum "package-lock.json" }}
         paths:
-        - "node_modules"
-    # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
-    # - run: xvfb-run -a npm run e2e -- --no-progress --config=protractor-ci.conf.js
-    - run: ng build --prod
+        - ./node_modules
+    - run:
+        name: Angular Build
+        command: ng build --prod
