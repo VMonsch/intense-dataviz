@@ -23,7 +23,7 @@ export class HomepageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
       this.initColumnChart('column-chart');
-      // this.initOscilloChart('oscillo-chart');
+      this.initOscilloChart('oscillo-chart');
     });
   }
 
