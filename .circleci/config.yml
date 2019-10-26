@@ -6,7 +6,6 @@ jobs:
     - image: circleci/node:12-browsers
     steps:
     - checkout
-      path: ~/intense-dataviz
 
     - restore_cache:
       key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
