@@ -16,4 +16,20 @@ jobs:
         - "node_modules"
     # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
     # - run: xvfb-run -a npm run e2e -- --no-progress --config=protractor-ci.conf.js
-    - run: ng build --prod
+    - run: node_modules/.bin/ng build --prod
+  deploy:
+    working_directory: ~/client
+    docker:
+    - image: circleci/node:8-browsers
+    steps:
+    - checkout
+    - restore_cache:
+        key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
+    - run: npm install 'firebase-tools'
+    - save_cache:
+        key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
+        paths:
+        - "node_modules"
+    # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
+    # - run: xvfb-run -a npm run e2e -- --no-progress --config=protractor-ci.conf.js
+    - run: node_modules/.bin/firebase deploy --project $FIREBASE_PROJECT --token $FIREBASE_TOKEN
