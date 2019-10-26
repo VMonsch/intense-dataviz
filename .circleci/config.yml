@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/client
+    working_directory: ~/repo
     docker:
     - image: circleci/node:12-browsers
     steps:
@@ -9,6 +9,7 @@ jobs:
     - restore_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
     - run: npm install '@angular/cli'
+    - run: cd ./client/
     - run: npm install
     - save_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
