@@ -8,7 +8,7 @@ jobs:
     - checkout
     - restore_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
-    - run: npm install '@angular/cli'
+    - run: cd client && npm install '@angular/cli'
     - run: cd client && npm install
     - save_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
@@ -25,7 +25,7 @@ jobs:
     - checkout
     - restore_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
-    - run: npm install 'firebase-tools'
+    - run: cd client && npm install 'firebase-tools'
     - save_cache:
         key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
         paths:
