@@ -7,10 +7,10 @@ jobs:
     steps:
     - checkout
     - restore_cache:
-        key: IntenseDataViz-{{ .Branch }}-{{ checksum "package.json" }}
+        key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
     - run: npm install
     - save_cache:
-        key: IntenseDataViz-{{ .Branch }}-{{ checksum "package.json" }}
+        key: IntenseDataViz-{{ .Branch }} #-{{ checksum "package.json" }}
         paths:
         - "node_modules"
     # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
