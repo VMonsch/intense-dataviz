@@ -38,6 +38,6 @@ workflows:
   build_then_deploy:
     jobs:
     - build
-      - deploy:
-          requires:
-          - build
+    - deploy:
+        requires:
+        - build
