@@ -3,7 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
-import { WasabiService } from './wasabi.service';
+import { WasabiService } from './service/wasabi.service';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
@@ -20,25 +20,10 @@ am4core.useTheme(am4themes_animated);
 export class AppComponent implements OnDestroy, AfterViewInit {
   constructor(
     private zone: NgZone,
-    private wasabiService: WasabiService,
-    private router: Router) {}
+    private wasabiService: WasabiService) {}
 
   private demoChart: am4charts.XYChart;
   private columnChart: am4charts.XYChart;
-
-  searchText: string;
-  search = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(term =>
-        this.wasabiService.getSearchWithAutoCompletion(term).pipe(
-          catchError(() => {
-            return of([]);
-          }))
-      ))
-
-  formatter = (result: Artist) => result.name;
 
   ngAfterViewInit() {
   this.zone.runOutsideAngular(() => {
@@ -160,11 +145,4 @@ export class AppComponent implements OnDestroy, AfterViewInit {
       }
     });
   }
-
-  onSelectSearch(item) {
-    console.log(item);
-    this.router.navigate(['/artist', item.name]);
-
-  }
-
 }

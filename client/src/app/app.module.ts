@@ -6,16 +6,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
 import { HttpClientModule } from '@angular/common/http';
-import { WasabiService } from './wasabi.service';
+import { WasabiService } from './service/wasabi.service';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import { ArtistComponent } from './artist/artist.component';
+import { ArtistComponent } from './custom-components/artist/artist.component';
+import { NavBarComponent } from './custom-components/nav-bar/nav-bar.component';
+import { HomepageComponent } from './custom-components/homepage/homepage.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ArtistComponent
+    ArtistComponent,
+    NavBarComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,

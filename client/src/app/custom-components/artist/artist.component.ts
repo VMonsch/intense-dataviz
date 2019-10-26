@@ -10,6 +10,7 @@ export class ArtistComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('artist component');
   }
 
 }

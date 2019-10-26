@@ -1,36 +1,3 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">intense-dataviz</a>
-
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0">
-
-      <ng-template #rt let-r="result" let-t="term" >
-        <div>
-          <div class="headerSuggest">{{r.albumTitle!==undefined && r.title !==undefined? 'Album' : 'Artist'}}</div>
-          <img [src]="r.picture" class="mr-1" style="width: 16px">
-          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-          <div class="albumSuggestion" *ngIf="r.albumTitle!==undefined && r.title !==undefined">
-            {{r.title}}  - {{r.albumTitle}}
-          </div>
-        </div>
-      </ng-template>
-
-      <input
-        id="typeahead-focus"
-        type="text"
-        class="form-control"
-        [(ngModel)]="searchText"
-        [ngbTypeahead]="search"
-        #instance="ngbTypeahead"
-        name="searchField"
-        (selectItem)="onSelectSearch($event.item)"
-        [inputFormatter]="formatter"
-        [resultTemplate]="rt"
-      />
-    </form>
-  </div>
-</nav>
-
-<div id="column-chart" style="width: 100%; height: 500px"></div>
-<div id="demo-chart" style="width: 100%; height: 500px"></div>
+<router-outlet></router-outlet>
+<!--<div id="column-chart" style="width: 100%; height: 500px"></div>
+<div id="demo-chart" style="width: 100%; height: 500px"></div>-->
