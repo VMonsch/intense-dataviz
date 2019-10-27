@@ -16,7 +16,7 @@ export class AmchartsService {
 
     data.forEach(artist => {
       columnChart.data.push({
-        name: artist.name,
+        name: artist.name || artist.membername,
         points: artist.sum,
         color: columnChart.colors.next(),
         bullet: this.getRandomFace()

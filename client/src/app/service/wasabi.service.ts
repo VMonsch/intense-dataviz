@@ -20,4 +20,9 @@ export class WasabiService {
     const url = this.root + this.apiRoute + '/artist/count/album' + '?limit=' + count + '&skip=' + skip;
     return this.http.get(url);
   }
+
+  getArtistsWithMostBands(count: number = 5, skip: number = 0): Observable<any> {
+    const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
+    return this.http.get(url);
+  }
 }

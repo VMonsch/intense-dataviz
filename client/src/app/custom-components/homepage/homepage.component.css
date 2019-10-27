@@ -1,8 +1,8 @@
-#homepage-tabset, #column-chart {
+#homepage-tabset, .column-chart {
   margin: 2rem 0;
 }
 
-#column-chart, #oscillo-chart {
+.column-chart {
   width: 100%;
   height: 30rem;
 }
