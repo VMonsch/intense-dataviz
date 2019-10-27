@@ -17,6 +17,8 @@ jobs:
     # - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
     # - run: xvfb-run -a npm run e2e -- --no-progress --config=protractor-ci.conf.js
     - run: cd client && node_modules/.bin/ng build --prod
+    - store_artifacts:
+        path: /client/dist/client
   deploy:
     # working_directory: ~/intense-dataviz/client
     docker:
