@@ -12,7 +12,7 @@ import {filter, map} from 'rxjs/operators';
 export class ArtistComponent implements OnInit {
 
   private artistName: string;
-  albums: Array [any];
+  albums: [any];
   page = 1;
   pageSize = 5;
   collectionSize;
@@ -32,7 +32,7 @@ export class ArtistComponent implements OnInit {
     );
   }
 
-  get albumFormatter(): Array[any] {
+  get albumFormatter(): Array<any> [] {
     return this.albums === undefined
       ? []
       : (this.albums.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize));

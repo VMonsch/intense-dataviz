@@ -26,9 +26,13 @@ export class WasabiService {
     return this.http.get(url);
   }
 
-
   getArtistByName(artistName: string): Observable<any> {
     const url = this.root + this.apiRoute + '/artist_all/name/' + artistName;
+    return this.http.get(url);
+  }
+
+  getArtistsWithMostBands(count: number = 5, skip: number = 0): Observable<any> {
+    const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
     return this.http.get(url);
   }
 }
