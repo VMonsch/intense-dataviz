@@ -34,9 +34,7 @@ export class NavBarComponent {
   formatter = (result: Artist) => result.name;
 
   onSelectSearch(item) {
-    console.log(item);
     this.router.navigate(['/artist', item.name]);
-
   }
 
 

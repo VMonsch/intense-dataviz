@@ -1,2 +1,28 @@
-<p>artist works!</p>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Titre de l'album</th>
+    <th scope="col">Fans Deezer</th>
+    <th scope="col">Date de parution</th>
+    <th scope="col">Genre</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let album of albumFormatter">
+    <td>
+      <img [src]="album.cover!= undefined ?album.cover.standard:''" class="mr-2" style="width: 60px">
+      {{ album.title }}
+    </td>
+    <td>{{ album.deezerFans  }}</td>
+    <td>{{ album.dateRelease  }}</td>
+    <td>{{ album.genre  }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize">
+  </ngb-pagination>
+</div>
+
 <router-outlet></router-outlet>
