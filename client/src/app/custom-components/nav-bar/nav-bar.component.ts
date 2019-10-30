@@ -34,7 +34,12 @@ export class NavBarComponent {
   formatter = (result: Artist) => result.name;
 
   onSelectSearch(item) {
-    this.router.navigate(['/artist', item.name]);
+    if (item.albumTitle !== undefined && item.title !== undefined) {
+      this.router.navigate(['/album', item.name]);
+    } else{
+      this.router.navigate(['/artist', item.name]);
+    }
+
   }
 
 

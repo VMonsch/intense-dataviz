@@ -13,6 +13,7 @@ import {RouterModule} from '@angular/router';
 import { ArtistComponent } from './custom-components/artist/artist.component';
 import { NavBarComponent } from './custom-components/nav-bar/nav-bar.component';
 import { HomepageComponent } from './custom-components/homepage/homepage.component';
+import { AlbumComponent } from './custom-components/album/album.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { HomepageComponent } from './custom-components/homepage/homepage.compone
     AppComponent,
     ArtistComponent,
     NavBarComponent,
-    HomepageComponent
+    HomepageComponent,
+    AlbumComponent
   ],
   imports: [
     BrowserModule,
