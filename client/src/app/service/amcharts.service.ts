@@ -9,7 +9,6 @@ import * as am4core from '@amcharts/amcharts4/core';
 export class AmchartsService {
 
   constructor() { }
-
   drawColumnChart(columnChart: am4charts.XYChart, data: Array<any> = []) {
     // this.columnChart.dispose();
     columnChart.data = [];
@@ -102,5 +101,105 @@ export class AmchartsService {
     const randomNumber = numbers.charAt(Math.floor(Math.random() * numbers.length));
 
     return 'https://www.amcharts.com/lib/images/faces/' + randomLetter + '0' + randomNumber + '.png';
+  }
+
+
+  drawDonutChartArtistKind(donutChart: am4charts.PieChart, data: Array<any> = []) {
+
+    const pieSeries = donutChart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = 'count';
+    pieSeries.dataFields.category = 'genre';
+
+// Let's cut a hole in our Pie chart the size of 30% the radius
+    donutChart.innerRadius = am4core.percent(30);
+
+    pieSeries.labels.template.disabled = true;
+// Put a thick white border around each Slice
+    pieSeries.slices.template.stroke = am4core.color('#fff');
+    pieSeries.slices.template.strokeWidth = 2;
+    pieSeries.slices.template.strokeOpacity = 1;
+    pieSeries.slices.template
+      // change the cursor on hover to make it apparent the object can be interacted with
+      .cursorOverStyle = [
+      {
+        property: 'cursor',
+        value: 'pointer'
+      }
+    ];
+
+    pieSeries.ticks.template.disabled = true;
+
+// Create a base filter effect (as if it's not there) for the hover to return to
+    const shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter());
+    shadow.opacity = 0;
+
+// Create hover state
+    const hoverState = pieSeries.slices.template.states.getKey('hover'); // normally we have to create the hover state, in this case it already exists
+
+// Slightly shift the shadow and make it more prominent on hover
+    const hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter());
+    hoverShadow.opacity = 0.7;
+    hoverShadow.blur = 5;
+
+    donutChart.data = [];
+    data.forEach(album => {
+      if (album.genre === '') {  album.genre = 'N/A'; }
+      if (donutChart.data.some(e => e.genre === album.genre)) {
+          donutChart.data.find(e2 => e2.genre === album.genre).count += 1;
+        } else {
+          donutChart.data.push({genre: album.genre, count: 1});
+        }
+      });
+
+
+    donutChart.legend = new am4charts.Legend();
+    donutChart.legend.position = 'right';
+  }
+
+  drawDurationInBrand(chart: am4charts.XYChart, data: Array<any> = []) {
+    console.log(data);
+    data.forEach(e => {
+      if (e.end === '') {
+        e.end = new Date().getFullYear();
+      }else{
+        e.end = e.end.substring(0, 4);
+      }
+      e.begin = e.begin.substring(0, 4);
+    });
+    chart.data = data;
+    const categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.ticks.template.disabled = true;
+    categoryAxis.renderer.axisFills.template.disabled = true;
+    categoryAxis.dataFields.category = 'name';
+    categoryAxis.renderer.inversed = true;
+    // categoryAxis.renderer.grid.template.strokeDasharray = '1,3';
+
+    const valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.tooltip.disabled = true;
+    valueAxis.renderer.ticks.template.disabled = true;
+    valueAxis.renderer.axisFills.template.disabled = true;
+
+    const series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = 'name';
+    series.dataFields.openValueX = 'begin';
+    series.dataFields.valueX = 'end';
+    series.tooltipText = 'Debut: {openValueX.value} Fin: {valueX.value}';
+    series.sequencedInterpolation = true;
+    series.fillOpacity = 0;
+    series.strokeOpacity = 1;
+    series.columns.template.height = 0.01;
+    series.tooltip.pointerOrientation = 'vertical';
+
+    const openBullet = series.bullets.create(am4charts.CircleBullet);
+    // openBullet.locationX = 1;
+    openBullet.locationX = 1;
+
+    const closeBullet = series.bullets.create(am4charts.CircleBullet);
+    closeBullet.fill = chart.colors.getIndex(4);
+    closeBullet.stroke = closeBullet.fill;
+
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.behavior = 'zoomY';
   }
 }
