@@ -161,7 +161,7 @@ export class AmchartsService {
     data.forEach(e => {
       if (e.end === '') {
         e.end = new Date().getFullYear();
-      }else{
+      } else {
         e.end = e.end.substring(0, 4);
       }
       e.begin = e.begin.substring(0, 4);
@@ -193,6 +193,7 @@ export class AmchartsService {
 
     const openBullet = series.bullets.create(am4charts.CircleBullet);
     // openBullet.locationX = 1;
+    // @ts-ignore
     openBullet.locationX = 1;
 
     const closeBullet = series.bullets.create(am4charts.CircleBullet);

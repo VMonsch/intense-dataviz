@@ -15,7 +15,7 @@ export class HomepageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private zone: NgZone,
-    private wasabiService: WasabiService,
+    public wasabiService: WasabiService,
     private amChartsService: AmchartsService) {}
 
   charts = {
@@ -25,21 +25,9 @@ export class HomepageComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   ngAfterViewInit() {
-    this.zone.runOutsideAngular(() => {
-      this.initColumnChart(this.charts.artistsWithMostAlbumsChart, 'artists-with-most-albums-chart', this.wasabiService.getArtistsWithMostAlbums());
-      this.initColumnChart(this.charts.artistsWithMostBandsChart, 'artists-with-most-bands-chart', this.wasabiService.getArtistsWithMostBands());
-    });
   }
 
   ngOnInit() {
-  }
-
-  initColumnChart(chart: am4charts.XYChart, divName: string, observable: Observable<any>) {
-    chart = am4core.create(divName, am4charts.XYChart);
-
-    observable.subscribe(data => {
-      this.amChartsService.drawColumnChart(chart, data);
-    });
   }
 
   initOscilloChart(divName: string, observable: Observable<any>) {

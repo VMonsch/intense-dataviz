@@ -14,6 +14,7 @@ import { ArtistComponent } from './custom-components/artist/artist.component';
 import { NavBarComponent } from './custom-components/nav-bar/nav-bar.component';
 import { HomepageComponent } from './custom-components/homepage/homepage.component';
 import { AlbumComponent } from './custom-components/album/album.component';
+import { ColumnChartComponent } from './custom-components/charts/column-chart/column-chart.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AlbumComponent } from './custom-components/album/album.component';
     ArtistComponent,
     NavBarComponent,
     HomepageComponent,
-    AlbumComponent
+    AlbumComponent,
+    ColumnChartComponent
   ],
   imports: [
     BrowserModule,
