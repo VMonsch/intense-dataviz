@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, NgZone, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {AmchartsService} from '../../../service/amcharts.service';
 import {Observable} from 'rxjs';
 import * as am4charts from '@amcharts/amcharts4/charts';
@@ -10,12 +10,11 @@ import * as am4core from '@amcharts/amcharts4/core';
   styleUrls: ['./column-chart.component.css']
 })
 
-export class ColumnChartComponent implements OnInit, AfterViewInit {
+export class ColumnChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  chart: am4charts.XYChart;
   @Input()
   chartId: string;
-  @Input()
-  chart: am4charts.XYChart;
   @Input()
   observable: Observable<any>;
 
@@ -24,18 +23,24 @@ export class ColumnChartComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
-      this.initColumnChart();
+      this.initChart();
     });
   }
 
   ngOnInit() {
   }
 
-  initColumnChart() {
+  initChart() {
     this.chart = am4core.create(this.chartId, am4charts.XYChart);
 
     this.observable.subscribe(data => {
       this.amChartsService.drawColumnChart(this.chart, data);
+    });
+  }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      this.chart.dispose();
     });
   }
 

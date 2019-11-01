@@ -4,14 +4,14 @@
       <ng-template ngbTabTitle><b>Top 5</b> artists with the <b>most albums</b></ng-template>
       <ng-template ngbTabContent>
         <!-- <div id="artists-with-most-albums-chart" class="column-chart"></div> -->
-        <app-column-chart chartId="artists-with-most-albums-chart" [chart]="charts.artistsWithMostAlbumsChart" [observable]="wasabiService.getArtistsWithMostAlbums()"></app-column-chart>
+        <app-column-chart chartId="artists-with-most-albums-chart" [observable]="wasabiService.getArtistsWithMostAlbums()"></app-column-chart>
       </ng-template>
     </ngb-tab>
     <ngb-tab>
       <ng-template ngbTabTitle><b>Top 5</b> artists with the <b>most bands</b></ng-template>
       <ng-template ngbTabContent>
         <!-- <div id="artists-with-most-bands-chart" class="column-chart"></div> -->
-        <app-column-chart chartId="artists-with-most-bands-chart" [chart]="charts.artistsWithMostBandsChart" [observable]="wasabiService.getArtistsWithMostBands()"></app-column-chart>
+        <app-column-chart chartId="artists-with-most-bands-chart" [observable]="wasabiService.getArtistsWithMostBands()"></app-column-chart>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

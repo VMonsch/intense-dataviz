@@ -9,9 +9,10 @@ import * as am4core from '@amcharts/amcharts4/core';
 export class AmchartsService {
 
   constructor() { }
+
   drawColumnChart(columnChart: am4charts.XYChart, data: Array<any> = []) {
     // this.columnChart.dispose();
-    columnChart.data = [];
+    // columnChart.data = [];
 
     data.forEach(artist => {
       columnChart.data.push({

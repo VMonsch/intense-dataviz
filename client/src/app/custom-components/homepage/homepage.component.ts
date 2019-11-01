@@ -11,18 +11,12 @@ import {Observable} from 'rxjs';
   styleUrls: ['./homepage.component.css']
 })
 
-export class HomepageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HomepageComponent implements OnInit, AfterViewInit {
 
   constructor(
     private zone: NgZone,
     public wasabiService: WasabiService,
     private amChartsService: AmchartsService) {}
-
-  charts = {
-    artistsWithMostAlbumsChart: new am4charts.XYChart(),
-    artistsWithMostBandsChart: new am4charts.XYChart(),
-    oscilloChart: new am4charts.XYChart()
-  };
 
   ngAfterViewInit() {
   }
@@ -30,19 +24,11 @@ export class HomepageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
   }
 
-  initOscilloChart(divName: string, observable: Observable<any>) {
+  /*initOscilloChart(divName: string, observable: Observable<any>) {
     this.charts.oscilloChart = am4core.create(divName, am4charts.XYChart);
 
     observable.subscribe(data => {
       this.amChartsService.drawOscilloChart(this.charts.oscilloChart, data);
     });
-  }
-
-  ngOnDestroy() {
-    this.zone.runOutsideAngular(() => {
-      this.charts.artistsWithMostAlbumsChart.dispose();
-      this.charts.artistsWithMostBandsChart.dispose();
-      this.charts.oscilloChart.dispose();
-    });
-  }
+  }*/
 }
