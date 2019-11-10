@@ -15,6 +15,7 @@ import { NavBarComponent } from './custom-components/nav-bar/nav-bar.component';
 import { HomepageComponent } from './custom-components/homepage/homepage.component';
 import { AlbumComponent } from './custom-components/album/album.component';
 import { ColumnChartComponent } from './custom-components/charts/column-chart/column-chart.component';
+import {environment} from "../environments/environment";
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import { ColumnChartComponent } from './custom-components/charts/column-chart/co
     HttpClientModule,
     FormsModule,
     RouterModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
   providers: [WasabiService],
   bootstrap: [AppComponent]
