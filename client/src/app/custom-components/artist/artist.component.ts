@@ -7,6 +7,7 @@ import {AmchartsService} from '../../service/amcharts.service';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {string} from '@amcharts/amcharts4/core';
 
 @Component({
   selector: 'app-artist',
@@ -50,7 +51,8 @@ export class ArtistComponent implements OnInit {
           this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
           this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
           console.log(data);
-        this.ngxService.stop();
+          this.ngxService.stop();
+    });
   }
 
   initDonutChart(chart: am4charts.PieChart, divName: string) {
@@ -94,7 +96,7 @@ export class ArtistComponent implements OnInit {
     this.amChartsService.drawStackedArtistContribution(chart, data, listOfArtist);
   }
 
-  get albumFormatter(): Array<any> [] {
+  get albumFormatter(): Array < any > [] {
     return this.albums === undefined
       ? []
       : (this.albums.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize));
@@ -104,7 +106,7 @@ export class ArtistComponent implements OnInit {
   onClickAlbum(album) {
     console.log(album);
     this.router.navigate(['/album', album.name, album.title]);
-  }
+  };
 
 
   // Compare with other
