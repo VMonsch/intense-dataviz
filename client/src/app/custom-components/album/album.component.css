@@ -1,0 +1,12 @@
+.albumCard{
+  display: inline-block;
+  text-align: center;
+  padding: 5px;
+  text-decoration: none;
+}
+
+.albumCard > img{
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}

@@ -14,8 +14,9 @@ export class WasabiService {
   private apiRoute = '/api/v1';
   private cache = {
     artistsWithMostAlbums: undefined,
-    artistsWithMostBands: undefined
+    artistsWithMostBands: undefined,
   };
+  cacheMap = new Map();
 
   /**
    * Methode permettant de faire une autocompletion lorsqu'on recherche le nom d'un artiste ou d'un album
@@ -27,12 +28,14 @@ export class WasabiService {
   }
 
   getArtistsWithMostAlbums(count: number = 5, skip: number = 0): Observable<any> {
-    if (this.cache.artistsWithMostAlbums === undefined) {
-      const url = this.root + this.apiRoute + '/artist/count/album' + '?limit=' + count + '&skip=' + skip;
-      this.cache.artistsWithMostAlbums = this.executeQuery(url);
-    }
+    const url = this.root + this.apiRoute + '/artist/count/album' + '?limit=' + count + '&skip=' + skip;
 
-    return this.cache.artistsWithMostAlbums;
+    if (!this.cacheMap.has(url)) {
+      const data = this.executeQuery(url);
+      this.cacheMap.set(url, data);
+      return data;
+    }
+    return this.cacheMap.get(url);
   }
 
   getArtistByName(artistName: string): Observable<any> {
@@ -41,12 +44,8 @@ export class WasabiService {
   }
 
   getArtistsWithMostBands(count: number = 5, skip: number = 0): Observable<any> {
-    if (this.cache.artistsWithMostBands === undefined) {
-      const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
-      this.cache.artistsWithMostBands = this.executeQuery(url);
-    }
-
-    return this.cache.artistsWithMostBands;
+    const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
+    return this.executeQuery(url);
   }
 
   private serializeQuery(url: string, data: any) {
@@ -54,13 +53,38 @@ export class WasabiService {
     return this.firebaseService.createQuery({url, timestamp, data});
   }
 
-  private executeQuery(url: string): Observable<any> {
+  /*private executeQuery(url: string): Observable<any> {
     const observableResponse = this.http.get(url);
-
     observableResponse.subscribe(data => {
       this.serializeQuery(url, data);
     });
 
     return observableResponse;
+  }*/
+
+  private executeQuery(url: string): Observable<any> {
+    if (!this.cacheMap.has(url)) {
+      const observableResponse = this.http.get(url);
+      // TODO REMOVE DUPLICATION
+      /*observableResponse.subscribe(data => {
+        this.serializeQuery(url, data);
+      });*/
+      this.cacheMap.set(url, observableResponse);
+    }
+    return this.cacheMap.get(url);
+  }
+
+  getAlbumDetails(artist: string, album: string) {
+    const url = this.root + '/search/artist/' + artist + '/album/' + album ;
+    return this.executeQuery(url);
+  }
+
+  getSongDetails(idSong: string) {
+    const url = this.root + this.apiRoute + '/song/id/' + idSong;
+    return this.executeQuery(url);
+  }
+
+  putInCache(key: string, value) {
+    this.cacheMap.set(key, value);
   }
 }

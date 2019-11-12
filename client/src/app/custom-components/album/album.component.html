@@ -1,1 +1,7 @@
-<p>album works!</p>
+<div class="albumCard">
+  <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(albumDetails)">
+</div>
+
+
+<input type="button" value="PLAY"  (click)="onPlay()">
+<audio id="audio" src="http://e-cdn-preview-2.deezer.com/stream/219da2459fd205492883fe57d18f5a70-3.mp3" ></audio>

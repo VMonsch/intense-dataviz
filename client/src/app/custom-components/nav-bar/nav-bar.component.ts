@@ -36,7 +36,7 @@ export class NavBarComponent {
   onSelectSearch(item) {
     console.log(item);
     if (item.albumTitle !== undefined && item.title !== undefined) {
-      this.router.navigate(['/album', item.name, item.albumTitle]);
+      this.router.navigate(['/artist', item.name, 'album', item.albumTitle]);
     } else {
       this.router.navigate(['/artist', item.name]);
     }

@@ -8,7 +8,7 @@ import {AlbumComponent} from './custom-components/album/album.component';
 
 const routes: Routes = [
   {path: 'artist/:name', component: ArtistComponent},
-  {path: 'album/:name/:albumtitle', component: AlbumComponent},
+  {path: 'artist/:name/album/:albumtitle', component: AlbumComponent},
   {path: 'home', component: HomepageComponent},
   {path: '**', redirectTo : '/home'}];
 
