@@ -9,9 +9,9 @@
         <div>
           <div class="headerSuggest">{{r.albumTitle!==undefined && r.title !==undefined? 'Album' : 'Artist'}}</div>
           <img [src]="r.picture" class="mr-1" style="width: 16px">
-          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-          <div class="albumSuggestion" *ngIf="r.albumTitle!==undefined && r.title !==undefined">
-            {{r.title}}  - {{r.albumTitle}}
+          <ngb-highlight [result]="r.albumTitle!=undefined?r.albumTitle : r.name" [term]="t"></ngb-highlight>
+          <div class="albumSuggestion" *ngIf="r.title!==undefined">
+            {{r.title}}  - {{r.name}}
           </div>
         </div>
       </ng-template>

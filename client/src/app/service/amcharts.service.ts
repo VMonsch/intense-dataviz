@@ -158,7 +158,6 @@ export class AmchartsService {
   }
 
   drawDurationInBrand(chart: am4charts.XYChart, data: Array<any> = []) {
-    console.log(data);
     data.forEach(e => {
       if (e.end === '') {
         e.end = new Date().getFullYear();
@@ -204,4 +203,50 @@ export class AmchartsService {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.behavior = 'zoomY';
   }
+
+  drawStackedArtistContribution(chart: am4charts.XYChart, data: any[], listOfArtist: any[]) {
+
+    chart.data = data;
+    const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'title';
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+    categoryAxis.renderer.labels.template.horizontalCenter = 'right';
+    categoryAxis.renderer.labels.template.verticalCenter = 'middle';
+    categoryAxis.renderer.labels.template.rotation = 285;
+    categoryAxis.tooltip.disabled = true;
+    categoryAxis.renderer.minHeight = 110;
+
+
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.inside = true;
+    valueAxis.renderer.labels.template.disabled = true;
+    valueAxis.min = 0;
+
+    listOfArtist.forEach(e => {
+      // Set up series
+      const series = chart.series.push(new am4charts.ColumnSeries());
+      series.name = e;
+      series.dataFields.valueY = e;
+      series.dataFields.categoryX = 'title';
+      series.sequencedInterpolation = true;
+
+      // Make it stacked
+      series.stacked = true;
+
+      // Configure columns
+      series.columns.template.width = am4core.percent(60);
+      series.columns.template.tooltipText = '[bold]{name}[/]\n[font-size:14px] Contribution : {valueY}';
+
+      // Add label
+      const labelBullet = series.bullets.push(new am4charts.LabelBullet());
+      labelBullet.label.text = '{valueY}';
+      labelBullet.locationY = 0.5;
+    });
+
+// Legend
+    chart.legend = new am4charts.Legend();
+
+  }
+
 }

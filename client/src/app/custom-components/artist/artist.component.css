@@ -8,3 +8,65 @@
   height: 700px;
 }
 
+.stacked-chart{
+  width: 100%;
+  height: 800px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 180px;
+  height: 180px;
+}
+
+.hero-image {
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover !important;
+  height: 300px;
+  padding: 100px 100px;
+  filter: blur(3px) brightness(50%);
+  z-index: 0;
+}
+
+
+.hero-text {
+  text-align: center;
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.albumdsGallery{
+  z-index: 1;
+  background-color: white;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.albumCard{
+  display: inline-block;
+  text-align: center;
+  padding: 5px;
+  text-decoration: none;
+}
+
+.albumCard > img{
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.albumTitle{
+  color: black;
+  font-size: 14px;
+}
+
+.albumGenre{
+  color: gray;
+  font-size: 10px;
+}
+

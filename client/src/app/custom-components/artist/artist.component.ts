@@ -16,14 +16,17 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 export class ArtistComponent implements OnInit {
 
   private artistName: string;
+  artistPicture: string;
   albums: [any];
   members: [any];
   page = 1;
   pageSize = 5;
   collectionSize;
+  moreInfo: string;
   charts = {
     donutOfAlbumGenre: new am4charts.PieChart(),
     dumbellPlotDurationLife : new am4charts.XYChart(),
+    artistContribution : new am4charts.XYChart(),
   };
 
   constructor(private wasabiService: WasabiService,
@@ -38,14 +41,16 @@ export class ArtistComponent implements OnInit {
 
     this.artistName = this.router.url.split('/')[2];
     this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
-        this.albums = data.albums;
-        this.collectionSize = data.albums.length;
-        this.members = data.members;
-        this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
-        this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+          this.albums = data.albums;
+          this.artistPicture = data.picture.xl;
+          this.collectionSize = data.albums.length;
+          this.members = data.members;
+          this.moreInfo = data.urlWikipedia;
+          this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+          this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+          this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
+          console.log(data);
         this.ngxService.stop();
-      }
-    );
   }
 
   initDonutChart(chart: am4charts.PieChart, divName: string) {
@@ -58,22 +63,56 @@ export class ArtistComponent implements OnInit {
     this.amChartsService.drawDurationInBrand(chart, this.members);
   }
 
+  initStackedChart(chart: am4charts.XYChart, divName: string) {
+    chart = am4core.create(divName, am4charts.XYChart);
+    const data = [];
+    const listOfArtist = [];
+    this.albums.forEach(a => {
+      const value = {};
+      a.songs.forEach(s => {
+        if (s.writer !== undefined) {
+          s.writer.forEach(w => {
+            if (value[w] === undefined) {
+              value[w] = 1;
+              if (!listOfArtist.includes(w)) {
+                listOfArtist.push(w);
+              }
+            } else {
+              value[w] += 1;
+            }
+          });
+        }
+        });
+      if (a.title.length > 50) {
+        a.title = a.title.substr(0, 50);
+       // console.log(a.title.substr(0, 50));
+        a.title += '...';
+      }
+      value['title'] = a.title;
+      data.push(value);
+    });
+    this.amChartsService.drawStackedArtistContribution(chart, data, listOfArtist);
+  }
+
   get albumFormatter(): Array<any> [] {
     return this.albums === undefined
       ? []
       : (this.albums.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize));
 
   }
+
+  onClickAlbum(album) {
+    console.log(album);
+    this.router.navigate(['/album', album.name, album.title]);
+  }
+
+
+  // Compare with other
   /*
-    - Membre
-    - More informations
+      - banniere artiste
+     -  timeline du groupe des events;
     - liste des albums
-    - Qui a particper le plus a un album (custom chart chelou)
-    - durée dans le groupe (member)
-    - localisation
-    - plus de genre d'album (donuts)
-    - le plus de label utilisé (bar)
-    - durée de vie de la brand
+    - Qui a particper le plus a un album (custom chart chelou) => song et non album on pourra comparer entre les albums
    */
 
 }

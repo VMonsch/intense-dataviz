@@ -1,32 +1,23 @@
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th scope="col">Titre de l'album</th>
-    <th scope="col">Fans Deezer</th>
-    <th scope="col">Date de parution</th>
-    <th scope="col">Genre</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let album of albumFormatter">
-    <td>
-      <img [src]="album.cover!= undefined ?album.cover.standard:''" class="mr-2" style="width: 60px">
-      {{ album.title }}
-    </td>
-    <td>{{ album.deezerFans  }}</td>
-    <td>{{ album.dateRelease  }}</td>
-    <td>{{ album.genre  }}</td>
-  </tr>
-  </tbody>
-</table>
+<div class="hero-image"
+     [ngStyle]="{background: 'url(' + artistPicture + ') no-repeat center center'}"></div>
 
-<div class="d-flex justify-content-between p-2">
-  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize">
-  </ngb-pagination>
+<div class="hero-text">
+  <img src="{{artistPicture}}" alt="Avatar" class="avatar">
+  <h1>{{artistName.replace("%20", " ")}}</h1>
+  <a class="btn btn-light" href="{{moreInfo}}" role="button">Plus d'infos</a>
 </div>
 
+<div style="z-index: 10;transform: translate(0px, -5px);">
+<div class="albumdsGallery">
+  <div class="albumCard" *ngFor="let album of albums">
+    <img [src]="album.cover!= undefined ?album.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(album)">
+    <div class="albumTitle">{{ album.title.length > 25 ? album.title.substring(0,25)+"..." : album.title }}</div>
+    <div class="albumGenre">{{ album.genre }}</div>
+  </div>
+</div>
 
 <div id="kind-of-albums" class="pie-chart"></div>
 <div id="dumbell-plot-for-life-duration-brand" class="dumbellPlot-chart"></div>
-
+<div id="stacked-artist-contribution" class="stacked-chart"></div>
+</div>
 <router-outlet></router-outlet>
