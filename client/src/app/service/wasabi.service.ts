@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FirebaseService} from './firebase.service';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Injectable({
   providedIn: 'root'
