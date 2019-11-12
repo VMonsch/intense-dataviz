@@ -6,6 +6,7 @@ import {filter, map} from 'rxjs/operators';
 import {AmchartsService} from '../../service/amcharts.service';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-artist',
@@ -27,11 +28,14 @@ export class ArtistComponent implements OnInit {
 
   constructor(private wasabiService: WasabiService,
               private amChartsService: AmchartsService,
+              private ngxService: NgxUiLoaderService,
               private router: Router) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit() {
+    this.ngxService.start();
+
     this.artistName = this.router.url.split('/')[2];
     this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
         this.albums = data.albums;
@@ -39,10 +43,9 @@ export class ArtistComponent implements OnInit {
         this.members = data.members;
         this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
         this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
-        console.log(data);
+        this.ngxService.stop();
       }
     );
-
   }
 
   initDonutChart(chart: am4charts.PieChart, divName: string) {
