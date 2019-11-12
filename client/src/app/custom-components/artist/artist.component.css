@@ -40,7 +40,7 @@
   color: white;
 }
 
-.albumdsGallery{
+.albumsGallery{
   z-index: 1;
   background-color: white;
   overflow: auto;
@@ -68,5 +68,9 @@
 .albumGenre{
   color: gray;
   font-size: 10px;
+}
+
+#artist-charts {
+  margin-top: 3rem;
 }
 

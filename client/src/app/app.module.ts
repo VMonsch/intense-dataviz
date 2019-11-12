@@ -17,11 +17,12 @@ import { AlbumComponent } from './custom-components/album/album.component';
 import { ColumnChartComponent } from './custom-components/charts/column-chart/column-chart.component';
 import { NgxUiLoaderModule, NgxUiLoaderConfig, SPINNER, POSITION, PB_DIRECTION } from 'ngx-ui-loader';
 import { environment } from '../environments/environment';
+import { ComparisonComponent } from './custom-components/comparison/comparison.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   fgsType: SPINNER.rectangleBounceParty, // foreground spinner type
   fgsColor: 'lightgreen',
-  text: 'Wasabi',
+  text: 'intense-dataviz',
   hasProgressBar: false,
 };
 
@@ -32,7 +33,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     NavBarComponent,
     HomepageComponent,
     AlbumComponent,
-    ColumnChartComponent
+    ColumnChartComponent,
+    ComparisonComponent
   ],
   imports: [
     BrowserModule,
