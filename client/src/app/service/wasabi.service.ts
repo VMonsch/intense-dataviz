@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {FirebaseService} from './firebase.service';
-import {share} from 'rxjs/operators';
+import {share, publishReplay, refCount} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +51,11 @@ export class WasabiService {
 
   private executeQuery(url: string): Observable<any> {
     if (!this.cacheMap.has(url)) {
-      const observableResponse = this.http.get(url).pipe(share());
+      const observableResponse = this.http.get(url).pipe(
+        share(),
+        publishReplay(1),
+        refCount()
+      );
       observableResponse.subscribe(data => {
         this.serializeQuery(url, data);
       });
