@@ -3,5 +3,26 @@
 </div>
 
 
-<input type="button" value="PLAY"  (click)="onPlay()">
-<audio id="audio" src="http://e-cdn-preview-2.deezer.com/stream/219da2459fd205492883fe57d18f5a70-3.mp3" ></audio>
+<!--
+<table class="table table-striped"  >
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Country</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let song of albumDetails.songs; index as i">
+    <th scope="row">{{ i + 1 }}</th>
+    <td>
+      {{ song.title }}
+    </td>
+    <td>
+    </td>
+  </tr>
+  </tbody>
+</table>-->
+<div *ngIf="albumDetails !== undefined">
+<app-song-player-manager [songs]="albumDetails.songs"></app-song-player-manager>
+</div>
+

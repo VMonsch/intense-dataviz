@@ -26,35 +26,21 @@ export class AlbumComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.ngxService.start();
 
-    if (history.state.album === undefined) {
-      this.artistName = this.router.url.split('/')[2];
-      this.albumName = this.router.url.split('/')[4];
-      this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
+    this.artistName = this.router.url.split('/')[2];
+    this.albumName = this.router.url.split('/')[4];
+    this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
 
-        this.albumDetails = data.albums;
-        this.albumDetails.songs.forEach(e => {
-          this.songsUrls.push(this.wasabiService.getSongDetails(this.albumDetails.songs[0]._id));
-        });
+      this.albumDetails = data.albums;
 
-        forkJoin(this.songsUrls).subscribe(respList => {
-          console.log(respList);
-        });
+      this.albumDetails.songs.forEach(e => {
+        this.songsUrls.push(this.wasabiService.getSongDetails(e._id));
       });
-      this.ngxService.stop();
-    } else {
-      this.albumDetails = history.state.album;
-      this.artistName = history.state.album.albumTitle;
-      this.albumName = history.state.album.name;
-      // set dans le cache
-      // this.wasabiService.putInCache();
-      this.ngxService.stop();
-    }
 
+      forkJoin(this.songsUrls).subscribe(respList => {
+        this.albumDetails.songs = respList;
+       // console.log(respList);
+      });
+    });
+    this.ngxService.stop();
   }
-
-  onPlay() {
-    const audio = document.getElementById('audio');
-    audio.play();
-  }
-
 }

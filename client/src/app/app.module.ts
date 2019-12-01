@@ -18,6 +18,9 @@ import { ColumnChartComponent } from './custom-components/charts/column-chart/co
 import { NgxUiLoaderModule, NgxUiLoaderConfig, SPINNER, POSITION, PB_DIRECTION } from 'ngx-ui-loader';
 import { environment } from '../environments/environment';
 import { ComparisonComponent } from './custom-components/comparison/comparison.component';
+import { PlyrModule } from 'ngx-plyr';
+import { SongPlayerManagerComponent } from './custom-components/song-player-manager/song-player-manager.component';
+
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   fgsType: SPINNER.rectangleBounceParty, // foreground spinner type
@@ -33,8 +36,10 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     NavBarComponent,
     HomepageComponent,
     AlbumComponent,
+    ComparisonComponent,
     ColumnChartComponent,
-    ComparisonComponent
+    SongPlayerManagerComponent
+
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     FontAwesomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    PlyrModule
   ],
   providers: [WasabiService],
   bootstrap: [AppComponent]

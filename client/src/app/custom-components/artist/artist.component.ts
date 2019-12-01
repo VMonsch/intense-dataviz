@@ -25,9 +25,9 @@ export class ArtistComponent implements OnInit {
   collectionSize;
   moreInfo: string;
   charts = {
-    donutOfAlbumGenre: am4charts.PieChart,
-    dumbellPlotDurationLife : am4charts.XYChart,
-    artistContribution : am4charts.XYChart,
+    donutOfAlbumGenre: new am4charts.PieChart(),
+    dumbellPlotDurationLife : new am4charts.XYChart(),
+    artistContribution : new am4charts.XYChart()
   };
 
   constructor(private wasabiService: WasabiService,
@@ -90,6 +90,7 @@ export class ArtistComponent implements OnInit {
        // console.log(a.title.substr(0, 50));
         a.title += '...';
       }
+      // @ts-ignore
       value.title = a.title;
       data.push(value);
     });
@@ -104,7 +105,7 @@ export class ArtistComponent implements OnInit {
   }
 
   onClickAlbum(album) {
-    this.router.navigate(['/artist', album.name, 'album', album.title], {state : {album}});
+    this.router.navigate(['/artist', album.name, 'album', album.title]);
   }
 
 
