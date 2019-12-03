@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {Router} from '@angular/router';
 import {AmchartsService} from '../../service/amcharts.service';
@@ -12,7 +12,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
   templateUrl: './artist.component.html',
   styleUrls: ['./artist.component.css']
 })
-export class ArtistComponent implements OnInit {
+export class ArtistComponent implements OnInit, AfterViewInit {
 
   artistName: string;
   artistPicture: string;
@@ -27,6 +27,11 @@ export class ArtistComponent implements OnInit {
     dumbellPlotDurationLife : new am4charts.XYChart(),
     artistContribution : new am4charts.XYChart()
   };
+  chartsrender = {
+    donut: false,
+    dumbell: false,
+    stacked: false
+  };
 
   constructor(private wasabiService: WasabiService,
               private amChartsService: AmchartsService,
@@ -37,17 +42,41 @@ export class ArtistComponent implements OnInit {
     this.route.params.subscribe(routeParameters => this.artistName = routeParameters.artistName);
   }
 
+  ngAfterViewInit() {
+    if (!this.chartsrender.donut && this.albums !== undefined) {
+      this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+      this.chartsrender.donut = true;
+    }
+    if (!this.chartsrender.dumbell && this.members !== undefined) {
+      this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+      this.chartsrender.dumbell = true;
+    }
+    if (!this.chartsrender.stacked && this.albums !== undefined) {
+      this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
+      this.chartsrender.stacked = true;
+    }
+  }
+
   ngOnInit() {
     this.ngxService.start();
 
     this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
-          this.albums = data.albums;
-          this.artistPicture = data.picture.xl;
-          this.collectionSize = data.albums.length;
-          this.members = data.members;
-          this.moreInfo = data.urlWikipedia;
-          this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+      this.albums = data.albums;
+      this.artistPicture = data.picture.xl;
+      this.collectionSize = data.albums.length;
+      this.members = data.members;
+      this.moreInfo = data.urlWikipedia;
+
+      if (document.getElementById('kind-of-albums') !== null) {
+        this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+        this.chartsrender.donut = true;
+      }
+      if (document.getElementById('dumbell-plot-for-life-duration-brand\'') !== null) {
           this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+          this.chartsrender.dumbell = true;
+
+        }
+      if (document.getElementById('stacked-artist-contribution') !== null) {
           this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
           this.ngxService.stop();
     });
@@ -104,6 +133,7 @@ export class ArtistComponent implements OnInit {
   onClickAlbum(album) {
     this.router.navigate(['/artist', album.name, 'album', album.title]);
   }
+
 
 
   // Compare with other
