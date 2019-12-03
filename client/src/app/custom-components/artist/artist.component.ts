@@ -61,6 +61,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
     this.ngxService.start();
 
     this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
+      console.log(data);
       this.albums = data.albums;
       this.artistPicture = data.picture.xl;
       this.collectionSize = data.albums.length;
@@ -71,16 +72,19 @@ export class ArtistComponent implements OnInit, AfterViewInit {
         this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
         this.chartsrender.donut = true;
       }
-      if (document.getElementById('dumbell-plot-for-life-duration-brand\'') !== null) {
+      if (document.getElementById('dumbell-plot-for-life-duration-brand') !== null) {
           this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
           this.chartsrender.dumbell = true;
 
         }
       if (document.getElementById('stacked-artist-contribution') !== null) {
-          this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
-          this.ngxService.stop();
+        this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
+        this.chartsrender.stacked = true;
+      }
+
+      this.ngxService.stop();
     });
-  }
+}
 
   initDonutChart(chart: am4charts.PieChart, divName: string) {
     chart = am4core.create(divName, am4charts.PieChart);
@@ -131,6 +135,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
   }
 
   onClickAlbum(album) {
+    console.log(album);
     this.router.navigate(['/artist', album.name, 'album', album.title]);
   }
 

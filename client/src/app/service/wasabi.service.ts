@@ -19,22 +19,22 @@ export class WasabiService {
    */
   getSearchWithAutoCompletion(searchText): Observable<any> {
     const url = this.root + '/search/fulltext/' + searchText;
-    return this.executeQuery(url);
+    return this.executeQuery(url, null);
   }
 
   getArtistsWithMostAlbums(count: number = 5, skip: number = 0): Observable<any> {
     const url = this.root + this.apiRoute + '/artist/count/album' + '?limit=' + count + '&skip=' + skip;
-    return this.executeQuery(url);
+    return this.executeQuery(url, 'album ' + count + skip);
   }
 
   getArtistByName(artistName: string): Observable<any> {
     const url = this.root + this.apiRoute + '/artist_all/name/' + artistName;
-    return this.executeQuery(url);
+    return this.executeQuery(url, artistName);
   }
 
   getArtistsWithMostBands(count: number = 5, skip: number = 0): Observable<any> {
     const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
-    return this.executeQuery(url);
+    return this.executeQuery(url,   'band ' + count + skip);
   }
 
   private serializeQuery(url: string, data: any) {
@@ -42,10 +42,10 @@ export class WasabiService {
     return this.firebaseService.createQuery({url, timestamp, data});
   }
 
-  private executeQuery(url: string): Observable<any> {
+  private executeQuery(url: string, key: string): Observable<any> {
     let observableResponse;
-    if (localStorage.getItem(url) !== null) {
-      observableResponse = of(JSON.parse(localStorage.getItem(url)));
+    if (key != null && localStorage.getItem(key) !== null ) {
+      observableResponse = of(JSON.parse(localStorage.getItem(key)));
     } else {
       observableResponse =  this.http.get(url).pipe(
         publishReplay(1),
@@ -53,7 +53,12 @@ export class WasabiService {
     }
 
     observableResponse.subscribe(data => {
-      localStorage.setItem(url, JSON.stringify(data));
+      if (key != null && localStorage.getItem(key) === null) {
+        localStorage.setItem(key, JSON.stringify(data));
+      } else if (key != null) {
+        localStorage.removeItem(key);
+        localStorage.setItem(key, JSON.stringify(data));
+      }
       this.serializeQuery(url, data);
     });
 
@@ -64,12 +69,12 @@ export class WasabiService {
 
   getAlbumDetails(artist: string, album: string) {
     const url = this.root + '/search/artist/' + artist + '/album/' + album ;
-    return this.executeQuery(url);
+    return this.executeQuery(url, artist + album);
   }
 
   getSongDetails(idSong: string) {
     const url = this.root + this.apiRoute + '/song/id/' + idSong;
-    return this.executeQuery(url);
+    return this.executeQuery(url, idSong);
   }
 
 }

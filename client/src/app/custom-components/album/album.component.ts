@@ -23,7 +23,7 @@ export class AlbumComponent implements OnInit, AfterViewInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.route.params.subscribe(routeParameters => {
       this.artistName = routeParameters.artistName;
-      this.albumName = routeParameters.albumName;
+      this.albumName = routeParameters.albumTitle;
     });
   }
 
@@ -33,7 +33,6 @@ export class AlbumComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.ngxService.start();
-
     this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
 
       this.albumDetails = data.albums;
