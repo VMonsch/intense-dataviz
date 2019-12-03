@@ -77,4 +77,6 @@ export class WasabiService {
     return this.executeQuery(url, idSong);
   }
 
+  /*gerer exeception quto cache*/
+  // ERROR DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'Metallica' exceeded the quota.
 }

@@ -1,28 +1,35 @@
 <div class="albumCard">
-  <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(albumDetails)">
+  <div class="leftCard">
+    <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(albumDetails)">
+  </div>
+  <div class="rightCard">
+    <h1 *ngIf="albumDetails!== undefined">{{albumDetails.name}}</h1>
+    <div id="albumLegend" *ngIf="albumDetails!== undefined">
+      <p class="legends" *ngIf="albumDetails.songs.length">{{albumDetails.songs.length}} titres</p>
+      <p class="legends" *ngIf="albumDetails.genre">{{albumDetails.genre}}</p>
+      <p class="legends" *ngIf="albumDetails.dateRelease">{{albumDetails.dateRelease}}</p>
+      <p class="legends" *ngIf="albumDetails.length">{{albumDetails.length}} min</p>
+      <p class="legends" *ngIf="albumDetails.deezerFans">{{albumDetails.deezerFans}} fans Deezer</p>
+      <div class="tooltip-card">
+      <button class="btn btn-light" (click)="onNotifyChild()">{{!isLecture?'Ecouter':'Arreter'}}</button>
+        <!-- https://codepen.io/joannaong/pen/olkzh-->
+        <div class="bar-c">
+          <div id="bar-1" class="bar noAnim"></div>
+          <div id="bar-2" class="bar noAnim"></div>
+          <div id="bar-3" class="bar noAnim"></div>
+          <div id="bar-4" class="bar noAnim"></div>
+          <div id="bar-5" class="bar noAnim"></div>
+          <div id="bar-6" class="bar noAnim"></div>
+        </div>
+    </div>
+    </div>
+  </div>
 </div>
 
-
-<!--
-<table class="table table-striped"  >
-  <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">Country</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let song of albumDetails.songs; index as i">
-    <th scope="row">{{ i + 1 }}</th>
-    <td>
-      {{ song.title }}
-    </td>
-    <td>
-    </td>
-  </tr>
-  </tbody>
-</table>-->
-<div *ngIf="albumDetails !== undefined">
-<app-song-player-manager [songs]="albumDetails.songs"></app-song-player-manager>
+<div id="audioPlayer" *ngIf="albumDetails !== undefined">
+<app-song-player-manager [songs]="albumDetails.songs"
+                         [clickEventSubject]="clickEventLecture"
+                         (eventEmitterPlaySong)="eventPlaySong($event)">
+                          </app-song-player-manager>
 </div>
 

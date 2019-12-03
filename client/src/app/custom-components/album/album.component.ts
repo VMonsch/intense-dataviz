@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute, Router} from '@angular/router';
-import {forkJoin} from 'rxjs';
+import {forkJoin, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-album',
@@ -11,10 +11,12 @@ import {forkJoin} from 'rxjs';
 })
 
 export class AlbumComponent implements OnInit, AfterViewInit {
-  albumDetails;
-  artistName;
-  albumName;
-  songsUrls = [];
+  private albumDetails;
+  private artistName;
+  private albumName;
+  private songsUrls = [];
+  private clickEventLecture: Subject<any> = new Subject();
+  private isLecture = false;
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,
@@ -34,7 +36,7 @@ export class AlbumComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.ngxService.start();
     this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
-
+      console.log(data);
       this.albumDetails = data.albums;
 
       this.albumDetails.songs.forEach(e => {
@@ -47,5 +49,33 @@ export class AlbumComponent implements OnInit, AfterViewInit {
     });
 
     this.ngxService.stop();
+  }
+
+
+  onNotifyChild() {
+    this.isLecture = !this.isLecture;
+    if (this.isLecture) {
+      document.querySelectorAll('.bar').forEach(e => {
+        e.classList.remove('noAnim');
+      });
+    } else {
+      document.querySelectorAll('.bar').forEach(e => {
+        e.classList.add('noAnim');
+      });
+    }
+    this.clickEventLecture.next(this.isLecture);
+  }
+
+  eventPlaySong(event): void {
+    this.isLecture = event;
+    if (this.isLecture) {
+      document.querySelectorAll('.bar').forEach(e => {
+        e.classList.remove('noAnim');
+      });
+    } else {
+      document.querySelectorAll('.bar').forEach(e => {
+        e.classList.add('noAnim');
+      });
+    }
   }
 }

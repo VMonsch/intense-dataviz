@@ -1,13 +1,14 @@
 <table class="table">
   <tbody>
   <tr *ngFor="let song of songs; index as i">
-    <th scope="row">{{ i + 1 }}</th>
     <td>
       {{ song.title}}
+      <span class="red-dot" *ngIf="song.preview===''"></span>
+      <span class="green-dot" *ngIf="song.preview!==''"></span>
     </td>
     <td>
-      <audio [id]="'songPlyr'+i"  controls>
-        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="audio/mp3" />
+      <audio  [id]="'songPlyr'+i"  controls>
+        <source type="audio/mp3" />
       </audio>
     </td>
   </tr>
