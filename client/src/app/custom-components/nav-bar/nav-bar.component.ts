@@ -3,7 +3,7 @@ import {WasabiService} from '../../service/wasabi.service';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
-import {Artist} from '../../model/artist';
+import {ArtistModel} from '../../model/ArtistModel';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -30,7 +30,7 @@ export class NavBarComponent {
           }))
       ))
 
-  formatter = (result: Artist) => result.name;
+  formatter = (result: ArtistModel) => result.name;
 
   onSelectSearch(item) {
     console.log(item);

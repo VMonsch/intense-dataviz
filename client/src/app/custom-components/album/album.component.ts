@@ -11,10 +11,10 @@ import {forkJoin} from 'rxjs';
 })
 
 export class AlbumComponent implements OnInit, AfterViewInit {
-  private albumDetails;
-  private artistName;
-  private albumName;
-  private songsUrls = [];
+  albumDetails;
+  artistName;
+  albumName;
+  songsUrls = [];
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,

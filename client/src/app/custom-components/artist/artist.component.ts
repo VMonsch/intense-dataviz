@@ -6,22 +6,17 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {ArtistModel} from '../../model/ArtistModel';
 
 @Component({
   selector: 'app-artist',
   templateUrl: './artist.component.html',
   styleUrls: ['./artist.component.css']
 })
+
 export class ArtistComponent implements OnInit, AfterViewInit {
 
-  artistName: string;
-  artistPicture: string;
-  albums: [any];
-  members: [any];
-  page = 1;
-  pageSize = 5;
-  collectionSize;
-  moreInfo: string;
+  artist = new ArtistModel();
   charts = {
     donutOfAlbumGenre: new am4charts.PieChart(),
     dumbellPlotDurationLife : new am4charts.XYChart(),
@@ -39,19 +34,19 @@ export class ArtistComponent implements OnInit, AfterViewInit {
               private router: Router,
               private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.route.params.subscribe(routeParameters => this.artistName = routeParameters.artistName);
+    this.route.params.subscribe(routeParameters => this.artist.name = routeParameters.artistName);
   }
 
   ngAfterViewInit() {
-    if (!this.chartsrender.donut && this.albums !== undefined) {
+    if (!this.chartsrender.donut && this.artist.albums !== undefined) {
       this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
       this.chartsrender.donut = true;
     }
-    if (!this.chartsrender.dumbell && this.members !== undefined) {
+    if (!this.chartsrender.dumbell && this.artist.members !== undefined) {
       this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
       this.chartsrender.dumbell = true;
     }
-    if (!this.chartsrender.stacked && this.albums !== undefined) {
+    if (!this.chartsrender.stacked && this.artist.albums !== undefined) {
       this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
       this.chartsrender.stacked = true;
     }
@@ -60,47 +55,44 @@ export class ArtistComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.ngxService.start();
 
-    this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
-      console.log(data);
-      this.albums = data.albums;
-      this.artistPicture = data.picture.xl;
-      this.collectionSize = data.albums.length;
-      this.members = data.members;
-      this.moreInfo = data.urlWikipedia;
-
+    this.wasabiService.getArtistByName(this.artist.name).subscribe(data => {
+      this.artist.albums = data.albums;
+      this.artist.picture = data.picture.xl;
+      this.artist.collectionSize = data.albums.length;
+      this.artist.members = data.members;
+      this.artist.moreInfo = data.urlWikipedia;
       if (document.getElementById('kind-of-albums') !== null) {
         this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
         this.chartsrender.donut = true;
       }
       if (document.getElementById('dumbell-plot-for-life-duration-brand') !== null) {
-          this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
-          this.chartsrender.dumbell = true;
+        this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+        this.chartsrender.dumbell = true;
 
-        }
+      }
       if (document.getElementById('stacked-artist-contribution') !== null) {
         this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
         this.chartsrender.stacked = true;
       }
-
       this.ngxService.stop();
     });
-}
+  }
 
   initDonutChart(chart: am4charts.PieChart, divName: string) {
     chart = am4core.create(divName, am4charts.PieChart);
-    this.amChartsService.drawDonutChartArtistKind(chart, this.albums);
+    this.amChartsService.drawDonutChartArtistKind(chart, this.artist.albums);
   }
 
   initDumbellPlotChart(chart: am4charts.XYChart, divName: string) {
     chart = am4core.create(divName, am4charts.XYChart);
-    this.amChartsService.drawDurationInBrand(chart, this.members);
+    this.amChartsService.drawDurationInBrand(chart, this.artist.members);
   }
 
   initStackedChart(chart: am4charts.XYChart, divName: string) {
     chart = am4core.create(divName, am4charts.XYChart);
     const data = [];
     const listOfArtist = [];
-    this.albums.forEach(a => {
+    this.artist.albums.forEach(a => {
       const value = {};
       a.songs.forEach(s => {
         if (s.writer !== undefined) {
@@ -127,26 +119,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
     this.amChartsService.drawStackedArtistContribution(chart, data, listOfArtist);
   }
 
-  get albumFormatter(): Array < any > [] {
-    return this.albums === undefined
-      ? []
-      : (this.albums.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize));
-
-  }
-
   onClickAlbum(album) {
-    console.log(album);
     this.router.navigate(['/artist', album.name, 'album', album.title]);
   }
-
-
-
-  // Compare with other
-  /*
-      - banniere artiste
-     -  timeline du groupe des events;
-    - liste des albums
-    - Qui a particper le plus a un album (custom chart chelou) => song et non album on pourra comparer entre les albums
-   */
-
 }

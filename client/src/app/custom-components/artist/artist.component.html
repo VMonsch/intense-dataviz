@@ -1,17 +1,17 @@
 <div class="hero-image"
-     [ngStyle]="{background: 'url(' + artistPicture + ') no-repeat center center'}"></div>
+     [ngStyle]="{background: 'url(' + artist.picture + ') no-repeat center center'}"></div>
 
 <div class="hero-text">
-  <img src="{{artistPicture}}" alt="Avatar" class="avatar">
-  <h1>{{artistName.replace("%20", " ")}}</h1>
-  <a class="btn btn-light" href="{{moreInfo}}" role="button">Plus d'infos</a>
+  <img src="{{artist.picture}}" alt="Avatar" class="avatar">
+  <h1>{{artist.name.replace("%20", " ")}}</h1>
+  <a class="btn btn-light" href="{{artist.moreInfo}}" role="button">Plus d'infos</a>
 </div>
 
 <div style="z-index: 10;transform: translate(0px, -5px);">
 
   <div class="albumsGallery">
-    <div class="albumCard" *ngFor="let album of albums">
-      <img [src]="album.cover!= undefined ?album.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(album)">
+    <div class="albumCard" *ngFor="let album of artist.albums">
+      <img [src]="album.cover != undefined ? album.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(album)">
       <div class="albumTitle">{{ album.title.length > 25 ? album.title.substring(0,25)+"..." : album.title }}</div>
       <div class="albumGenre">{{ album.genre }}</div>
     </div>
