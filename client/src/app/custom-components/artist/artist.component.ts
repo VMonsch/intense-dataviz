@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
-import {NavigationStart, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {filter, map} from 'rxjs/operators';
+import {Router} from '@angular/router';
 import {AmchartsService} from '../../service/amcharts.service';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
+import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {string} from '@amcharts/amcharts4/core';
 
 @Component({
   selector: 'app-artist',
@@ -16,7 +14,7 @@ import {string} from '@amcharts/amcharts4/core';
 })
 export class ArtistComponent implements OnInit {
 
-  private artistName: string;
+  artistName: string;
   artistPicture: string;
   albums: [any];
   members: [any];
@@ -33,14 +31,15 @@ export class ArtistComponent implements OnInit {
   constructor(private wasabiService: WasabiService,
               private amChartsService: AmchartsService,
               private ngxService: NgxUiLoaderService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.route.params.subscribe(routeParameters => this.artistName = routeParameters.artistName);
   }
 
   ngOnInit() {
     this.ngxService.start();
 
-    this.artistName = this.router.url.split('/')[2];
     this.wasabiService.getArtistByName(this.artistName).subscribe(data => {
           this.albums = data.albums;
           this.artistPicture = data.picture.xl;
@@ -50,7 +49,6 @@ export class ArtistComponent implements OnInit {
           this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
           this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
           this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
-          console.log(data);
           this.ngxService.stop();
     });
   }
@@ -87,7 +85,6 @@ export class ArtistComponent implements OnInit {
         });
       if (a.title.length > 50) {
         a.title = a.title.substr(0, 50);
-       // console.log(a.title.substr(0, 50));
         a.title += '...';
       }
       // @ts-ignore

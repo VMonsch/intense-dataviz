@@ -5,13 +5,13 @@ import {ArtistComponent} from './custom-components/artist/artist.component';
 import {NavBarComponent} from './custom-components/nav-bar/nav-bar.component';
 import {HomepageComponent} from './custom-components/homepage/homepage.component';
 import {AlbumComponent} from './custom-components/album/album.component';
-import {ComparisonComponent} from "./custom-components/comparison/comparison.component";
+import {ComparisonComponent} from './custom-components/comparison/comparison.component';
 
 const routes: Routes = [
-  {path: 'artist/:name', component: ArtistComponent},
-  {path: 'artist/:name/album/:albumtitle', component: AlbumComponent},
   {path: '', component: HomepageComponent},
-  {path: 'comparison', component: ComparisonComponent},
+  {path: 'artist/:artistName', component: ArtistComponent},
+  {path: 'artist/:artistName/album/:albumTitle', component: AlbumComponent},
+  {path: 'comparison/:', component: ComparisonComponent},
   {path: '**', redirectTo : '/'}];
 
 @NgModule({

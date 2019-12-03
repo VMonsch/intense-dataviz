@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {forkJoin} from 'rxjs';
 
 @Component({
@@ -9,6 +9,7 @@ import {forkJoin} from 'rxjs';
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.css']
 })
+
 export class AlbumComponent implements OnInit, AfterViewInit {
   private albumDetails;
   private artistName;
@@ -17,7 +18,14 @@ export class AlbumComponent implements OnInit, AfterViewInit {
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.route.params.subscribe(routeParameters => {
+      this.artistName = routeParameters.artistName;
+      this.albumName = routeParameters.albumName;
+    });
+  }
 
   ngAfterViewInit() {
 
@@ -26,8 +34,6 @@ export class AlbumComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.ngxService.start();
 
-    this.artistName = this.router.url.split('/')[2];
-    this.albumName = this.router.url.split('/')[4];
     this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
 
       this.albumDetails = data.albums;
@@ -38,9 +44,9 @@ export class AlbumComponent implements OnInit, AfterViewInit {
 
       forkJoin(this.songsUrls).subscribe(respList => {
         this.albumDetails.songs = respList;
-       // console.log(respList);
       });
     });
+
     this.ngxService.stop();
   }
 }

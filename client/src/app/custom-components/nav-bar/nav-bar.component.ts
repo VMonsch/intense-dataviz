@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {Router} from '@angular/router';
-import * as am4charts from '@amcharts/amcharts4/charts';
 import {Observable, of} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {Artist} from '../../model/artist';
