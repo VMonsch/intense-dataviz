@@ -11,15 +11,15 @@
       <p class="legends" *ngIf="albumDetails.length">{{albumDetails.length}} min</p>
       <p class="legends" *ngIf="albumDetails.deezerFans">{{albumDetails.deezerFans}} fans Deezer</p>
       <div class="tooltip-card">
-      <button class="btn btn-light" (click)="onNotifyChild()">{{!isLecture?'Ecouter':'Arreter'}}</button>
+      <!-- <button class="btn btn-light" (click)="onNotifyChild()">{{!isLecture ?'Ecouter':'Arreter'}}</button>-->
         <!-- https://codepen.io/joannaong/pen/olkzh-->
-        <div class="bar-c">
-          <div id="bar-1" class="bar noAnim"></div>
-          <div id="bar-2" class="bar noAnim"></div>
-          <div id="bar-3" class="bar noAnim"></div>
-          <div id="bar-4" class="bar noAnim"></div>
-          <div id="bar-5" class="bar noAnim"></div>
-          <div id="bar-6" class="bar noAnim"></div>
+        <div class="bar-c" *ngIf="isLecture">
+          <div id="bar-1" class="bar"></div>
+          <div id="bar-2" class="bar "></div>
+          <div id="bar-3" class="bar "></div>
+          <div id="bar-4" class="bar "></div>
+          <div id="bar-5" class="bar "></div>
+          <div id="bar-6" class="bar "></div>
         </div>
     </div>
     </div>

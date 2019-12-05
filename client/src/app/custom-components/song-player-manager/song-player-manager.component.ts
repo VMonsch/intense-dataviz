@@ -18,14 +18,18 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
   clickEventSubject: Subject<any>;
   @Output()
   eventEmitterPlaySong = new EventEmitter();
+  private PLAYER_SUFFIX_ID = 'songPlyr';
+  private currentPlayerID: HTMLMediaElement;
+  private isPlayAll = false;
 
   ngOnInit() {
     this.clickEventSubject.subscribe(isPlay => {
+      this.isPlayAll = isPlay;
       if (isPlay) {
         const index = 0;
         this.playAll(index);
       } else {
-        this.stopAll(null);
+        this.stopCurrentSong(null, true);
       }
 
     });
@@ -39,11 +43,22 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
       const plyr = new Plyr(id, {captions: {active: true}});
       document.querySelector(id + '> source' ).setAttribute('src', value.preview);
       plyr.on('play', event => {
-        this.stopAll(event.target.childNodes[1].id);
-        this.eventEmitterPlaySong.emit(true);
+        if (!this.isPlayAll) {
+          this.isPlayAll = false;
+          this.stopCurrentSong(plyr.media, false);
+          this.currentPlayerID = plyr.media;
+          this.eventEmitterPlaySong.emit(true);
+        }
       });
       plyr.on('pause', event => {
-        this.eventEmitterPlaySong.emit(false);
+          if (!this.isPlayAll) {
+            this.eventEmitterPlaySong.emit(plyr.media !== this.currentPlayerID);
+          }
+      });
+      plyr.on('ended', event => {
+        if (!this.isPlayAll) {
+         this.stopCurrentSong(null, true);
+        }
       });
     }
    }
@@ -51,12 +66,15 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
 
   }
 
+  // feature play-all
    playAll(index): void {
-    const currentSong = document.getElementById('songPlyr' + index);
-    this.stopAll(null);
-    currentSong.play();
-    currentSong.onended = () => {
-      if (this.songs.length > index) {
+    this.isPlayAll = true;
+    this.currentPlayerID = document.getElementById(this.PLAYER_SUFFIX_ID + index) as HTMLMediaElement;
+    this.currentPlayerID.play();
+    this.currentPlayerID.onended = () => {
+      if (this.songs.length > index && this.isPlayAll) {
+        this.currentPlayerID.pause();
+        this.currentPlayerID.currentTime = 0;
         index++;
         this.playAll(index);
       }
@@ -64,14 +82,16 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
     };
   }
 
-  stopAll(exceptIndex): void {
-    for (let i = 0; i < this.songs.length; i++) {
-      if (exceptIndex == null || 'songPlyr' + i !== exceptIndex) {
-        const sound = document.getElementById('songPlyr' + i);
-        sound.pause();
-        sound.currentTime = 0;
-      }
+  stopCurrentSong(idPlayerClicked, forceStop): void {
+    if (forceStop || this.currentPlayerID !== undefined && idPlayerClicked !== null && this.currentPlayerID !== idPlayerClicked) {
+      this.currentPlayerID.pause();
+      this.currentPlayerID.currentTime = 0;
+      this.currentPlayerID = undefined;
     }
+  }
+
+  animeAudioBar(): void {
+
   }
 
 

@@ -51,31 +51,22 @@ export class AlbumComponent implements OnInit, AfterViewInit {
     this.ngxService.stop();
   }
 
-
+  // feature play-all
   onNotifyChild() {
     this.isLecture = !this.isLecture;
-    if (this.isLecture) {
-      document.querySelectorAll('.bar').forEach(e => {
-        e.classList.remove('noAnim');
-      });
-    } else {
-      document.querySelectorAll('.bar').forEach(e => {
-        e.classList.add('noAnim');
-      });
-    }
-    this.clickEventLecture.next(this.isLecture);
+    this.clickEventLecture.next(this.isLecture );
   }
-
+  // feature play-all
   eventPlaySong(event): void {
     this.isLecture = event;
-    if (this.isLecture) {
-      document.querySelectorAll('.bar').forEach(e => {
-        e.classList.remove('noAnim');
-      });
-    } else {
-      document.querySelectorAll('.bar').forEach(e => {
-        e.classList.add('noAnim');
-      });
-    }
+    if (event) {
+        document.querySelectorAll('.bar').forEach(e => {
+          e.classList.remove('noAnim');
+        });
+      } else {
+        document.querySelectorAll('.bar').forEach(e => {
+          e.classList.add('noAnim');
+        });
+      }
   }
 }
