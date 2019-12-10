@@ -17,11 +17,9 @@ import {ArtistModel} from '../../model/ArtistModel';
 export class ArtistComponent implements OnInit, AfterViewInit {
 
   artist = new ArtistModel();
-  charts = {
-    donutOfAlbumGenre: new am4charts.PieChart(),
-    dumbellPlotDurationLife : new am4charts.XYChart(),
-    artistContribution : new am4charts.XYChart()
-  };
+  donutOfAlbumGenre: am4charts.PieChart;
+  dumbellPlotDurationLife: am4charts.XYChart;
+  artistContribution: am4charts.XYChart;
   chartsrender = {
     donut: false,
     dumbell: false,
@@ -39,15 +37,15 @@ export class ArtistComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (!this.chartsrender.donut && this.artist.albums !== undefined) {
-      this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+      this.initDonutChart('kind-of-albums');
       this.chartsrender.donut = true;
     }
     if (!this.chartsrender.dumbell && this.artist.members !== undefined) {
-      this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+      this.initDumbellPlotChart('dumbell-plot-for-life-duration-brand');
       this.chartsrender.dumbell = true;
     }
     if (!this.chartsrender.stacked && this.artist.albums !== undefined) {
-      this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
+      this.initStackedChart('stacked-artist-contribution');
       this.chartsrender.stacked = true;
     }
   }
@@ -62,34 +60,34 @@ export class ArtistComponent implements OnInit, AfterViewInit {
       this.artist.members = data.members;
       this.artist.moreInfo = data.urlWikipedia;
       if (document.getElementById('kind-of-albums') !== null) {
-        this.initDonutChart(this.charts.donutOfAlbumGenre, 'kind-of-albums');
+        this.initDonutChart( 'kind-of-albums');
         this.chartsrender.donut = true;
       }
       if (document.getElementById('dumbell-plot-for-life-duration-brand') !== null) {
-        this.initDumbellPlotChart(this.charts.dumbellPlotDurationLife, 'dumbell-plot-for-life-duration-brand');
+        this.initDumbellPlotChart( 'dumbell-plot-for-life-duration-brand');
         this.chartsrender.dumbell = true;
 
       }
       if (document.getElementById('stacked-artist-contribution') !== null) {
-        this.initStackedChart(this.charts.artistContribution, 'stacked-artist-contribution');
+        this.initStackedChart('stacked-artist-contribution');
         this.chartsrender.stacked = true;
       }
       this.ngxService.stop();
     });
   }
 
-  initDonutChart(chart: am4charts.PieChart, divName: string) {
-    chart = am4core.create(divName, am4charts.PieChart);
-    this.amChartsService.drawDonutChartArtistKind(chart, this.artist.albums);
+  initDonutChart( divName: string) {
+    this.donutOfAlbumGenre = am4core.create(divName, am4charts.PieChart);
+    this.amChartsService.drawDonutChartArtistKind(this.donutOfAlbumGenre, this.artist.albums);
   }
 
-  initDumbellPlotChart(chart: am4charts.XYChart, divName: string) {
-    chart = am4core.create(divName, am4charts.XYChart);
-    this.amChartsService.drawDurationInBrand(chart, this.artist.members);
+  initDumbellPlotChart( divName: string) {
+    this.dumbellPlotDurationLife = am4core.create(divName, am4charts.XYChart);
+    this.amChartsService.drawDurationInBrand(this.dumbellPlotDurationLife, this.artist.members);
   }
 
-  initStackedChart(chart: am4charts.XYChart, divName: string) {
-    chart = am4core.create(divName, am4charts.XYChart);
+  initStackedChart(divName: string) {
+    this.artistContribution = am4core.create(divName, am4charts.XYChart);
     const data = [];
     const listOfArtist = [];
     this.artist.albums.forEach(a => {
@@ -116,7 +114,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
       value.title = a.title;
       data.push(value);
     });
-    this.amChartsService.drawStackedArtistContribution(chart, data, listOfArtist);
+    this.amChartsService.drawStackedArtistContribution(this.artistContribution, data, listOfArtist);
   }
 
   onClickAlbum(album) {
