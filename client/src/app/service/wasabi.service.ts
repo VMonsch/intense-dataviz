@@ -24,7 +24,7 @@ export class WasabiService {
 
   getArtistsWithMostAlbums(count: number = 5, skip: number = 0): Observable<any> {
     const url = this.root + this.apiRoute + '/artist/count/album' + '?limit=' + count + '&skip=' + skip;
-    return this.executeQuery(url, 'album ' + count + skip);
+    return this.executeQuery(url, null);
   }
 
   getArtistByName(artistName: string): Observable<any> {
@@ -34,7 +34,7 @@ export class WasabiService {
 
   getArtistsWithMostBands(count: number = 5, skip: number = 0): Observable<any> {
     const url = this.root + this.apiRoute + '/artist/member/count/band' + '?limit=' + count + '&skip=' + skip;
-    return this.executeQuery(url,   'band ' + count + skip);
+    return this.executeQuery(url, null);
   }
 
   private serializeQuery(url: string, data: any) {
@@ -49,7 +49,8 @@ export class WasabiService {
     } else {
       observableResponse =  this.http.get(url).pipe(
         publishReplay(1),
-        refCount());
+        refCount()
+      );
     }
 
     observableResponse.subscribe(data => {
@@ -77,6 +78,4 @@ export class WasabiService {
     return this.executeQuery(url, idSong);
   }
 
-  /*gerer exeception quto cache*/
-  // ERROR DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'Metallica' exceeded the quota.
 }
