@@ -2,7 +2,9 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute, Router} from '@angular/router';
-import {forkJoin, Subject} from 'rxjs';
+import {forkJoin} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-album',
@@ -11,15 +13,14 @@ import {forkJoin, Subject} from 'rxjs';
 })
 
 export class AlbumComponent implements OnInit, AfterViewInit {
-  private albumDetails;
-  private artistName;
-  private albumName;
-  private songsUrls = [];
-  private clickEventLecture: Subject<any> = new Subject();
-  private isLecture = false;
+  albumDetails;
+  artistName;
+  albumName;
+  songsUrls = [];
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,
+              private titleService: Title,
               private router: Router,
               private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -34,9 +35,10 @@ export class AlbumComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle(this.albumName + ' - ' + this.artistName + ' - ' + environment.appName);
     this.ngxService.start();
     this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
-      console.log(data);
+
       this.albumDetails = data.albums;
 
       this.albumDetails.songs.forEach(e => {
@@ -49,24 +51,5 @@ export class AlbumComponent implements OnInit, AfterViewInit {
     });
 
     this.ngxService.stop();
-  }
-
-  // feature play-all
-  onNotifyChild() {
-    this.isLecture = !this.isLecture;
-    this.clickEventLecture.next(this.isLecture );
-  }
-  // feature play-all
-  eventPlaySong(event): void {
-    this.isLecture = event;
-    if (event) {
-        document.querySelectorAll('.bar').forEach(e => {
-          e.classList.remove('noAnim');
-        });
-      } else {
-        document.querySelectorAll('.bar').forEach(e => {
-          e.classList.add('noAnim');
-        });
-      }
   }
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {Router} from '@angular/router';
 import {AmchartsService} from '../../service/amcharts.service';
@@ -7,6 +7,8 @@ import * as am4core from '@amcharts/amcharts4/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ArtistModel} from '../../model/ArtistModel';
+import {Title} from '@angular/platform-browser';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-artist',
@@ -29,6 +31,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
   constructor(private wasabiService: WasabiService,
               private amChartsService: AmchartsService,
               private ngxService: NgxUiLoaderService,
+              private titleService: Title,
               private router: Router,
               private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -51,6 +54,7 @@ export class ArtistComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle(this.artist.name + ' - ' + environment.appName);
     this.ngxService.start();
 
     this.wasabiService.getArtistByName(this.artist.name).subscribe(data => {
