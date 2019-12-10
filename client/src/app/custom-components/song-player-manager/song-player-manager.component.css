@@ -16,3 +16,12 @@
   display: inline-block;
 }
 
+.pagination {
+  margin: auto;
+  width: fit-content;
+}
+
+.pagination button {
+  margin-left: 2px;
+  margin-right: 2px;
+}

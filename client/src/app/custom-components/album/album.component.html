@@ -5,7 +5,7 @@
   <div class="rightCard">
     <h1 *ngIf="albumDetails!== undefined">{{albumDetails.name}}</h1>
     <div id="albumLegend" *ngIf="albumDetails!== undefined">
-      <p class="legends" *ngIf="albumDetails.songs.length">{{albumDetails.songs.length}} titres</p>
+      <p class="legends" *ngIf="nbSongs">{{nbSongs}} titres</p>
       <p class="legends" *ngIf="albumDetails.genre">{{albumDetails.genre}}</p>
       <p class="legends" *ngIf="albumDetails.dateRelease">{{albumDetails.dateRelease}}</p>
       <p class="legends" *ngIf="albumDetails.length">{{albumDetails.length}} min</p>
@@ -27,9 +27,11 @@
 </div>
 
 <div id="audioPlayer" *ngIf="albumDetails !== undefined">
-<app-song-player-manager [songs]="albumDetails.songs"
+<app-song-player-manager [songs]="songListDisplayed"
+                         [currentPage]="currentPage"
                          [clickEventSubject]="clickEventLecture"
-                         (eventEmitterPlaySong)="eventPlaySong($event)">
+                         (eventEmitterPlaySong)="eventPlaySong($event)"
+                         (eventEmitterChangePage)="eventChildOnChangePage($event)">
                           </app-song-player-manager>
 </div>
 

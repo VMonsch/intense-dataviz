@@ -13,10 +13,16 @@ import {Title} from '@angular/platform-browser';
 })
 
 export class AlbumComponent implements OnInit, AfterViewInit {
-  albumDetails;
-  artistName;
-  albumName;
-  songsUrls = [];
+  private albumDetails;
+  private artistName;
+  private albumName;
+  private songsUrls = [];
+  private clickEventLecture: Subject<any> = new Subject();
+  private isLecture = false;
+  private pageSize = 5;
+  private nbSongs = 0;
+  private currentPage = 1;
+  private songListDisplayed = [];
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,
@@ -40,16 +46,63 @@ export class AlbumComponent implements OnInit, AfterViewInit {
     this.wasabiService.getAlbumDetails(this.artistName, this.albumName).subscribe(data => {
 
       this.albumDetails = data.albums;
-
+      this.nbSongs = this.albumDetails.songs.length;
+/*
       this.albumDetails.songs.forEach(e => {
         this.songsUrls.push(this.wasabiService.getSongDetails(e._id));
       });
+*/
+
+      for (let start = 0 ; start < this.pageSize * this.currentPage; start++) {
+        this.songsUrls.push(this.wasabiService.getSongDetails(this.albumDetails.songs[start]._id));
+      }
 
       forkJoin(this.songsUrls).subscribe(respList => {
-        this.albumDetails.songs = respList;
+        this.songListDisplayed = respList;
       });
     });
 
     this.ngxService.stop();
+  }
+
+  eventChildOnChangePage(event): void {
+    this.currentPage = this.currentPage + event;
+    this.songsUrls = [];
+    for (let start = (this.pageSize * this.currentPage) - this.pageSize ;
+         start < this.pageSize * this.currentPage && start < this.albumDetails.songs.length;
+         start++) {
+        this.songsUrls.push(this.wasabiService.getSongDetails(this.albumDetails.songs[start]._id));
+
+    }
+    forkJoin(this.songsUrls).subscribe(respList => {
+      this.songListDisplayed = respList;
+    });
+
+    if (this.currentPage === 1) {
+
+    } else if (this.currentPage === Math.ceil(this.albumDetails.songs.length / this.pageSize)) {
+
+    } else {
+
+    }
+  }
+
+  // feature play-all
+  onNotifyChild() {
+    this.isLecture = !this.isLecture;
+    this.clickEventLecture.next(this.isLecture );
+  }
+  // feature play-all
+  eventPlaySong(event): void {
+    this.isLecture = event;
+    if (event) {
+        document.querySelectorAll('.bar').forEach(e => {
+          e.classList.remove('noAnim');
+        });
+      } else {
+        document.querySelectorAll('.bar').forEach(e => {
+          e.classList.add('noAnim');
+        });
+      }
   }
 }

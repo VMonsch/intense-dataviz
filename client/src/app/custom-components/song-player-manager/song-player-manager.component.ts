@@ -13,11 +13,15 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
 
   constructor() { }
   @Input()
+  currentPage;
+  @Input()
   songs;
   @Input()
   clickEventSubject: Subject<any>;
   @Output()
   eventEmitterPlaySong = new EventEmitter();
+  @Output()
+  eventEmitterChangePage = new EventEmitter();
   private PLAYER_SUFFIX_ID = 'songPlyr';
   private currentPlayerID: HTMLMediaElement;
   private isPlayAll = false;
@@ -94,6 +98,13 @@ export class SongPlayerManagerComponent implements OnInit, AfterViewInit, AfterC
 
   }
 
+  onNextPage(): void {
+    this.eventEmitterChangePage.emit(1);
+  }
+
+  onPrevPage(): void {
+    this.eventEmitterChangePage.emit(-1);
+  }
 
 }
 
