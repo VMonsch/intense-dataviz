@@ -2,7 +2,7 @@ import {Injectable, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {FirebaseService} from './firebase.service';
-import {share, publishReplay, refCount, map} from 'rxjs/operators';
+import {share, publishReplay, refCount, map, shareReplay} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +48,7 @@ export class WasabiService {
       observableResponse = of(JSON.parse(localStorage.getItem(key)));
     } else {
       observableResponse =  this.http.get(url).pipe(
+        share(),
         publishReplay(1),
         refCount()
       );

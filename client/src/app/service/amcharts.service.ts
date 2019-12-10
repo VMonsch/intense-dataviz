@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnChanges, SimpleChanges} from '@angular/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
 
@@ -11,9 +11,6 @@ export class AmchartsService {
   constructor() { }
 
   drawColumnChart(columnChart: am4charts.XYChart, data: Array<any> = []) {
-    // this.columnChart.dispose();
-    // columnChart.data = [];
-
     data.forEach(artist => {
       columnChart.data.push({
         name: artist.name || artist.membername,

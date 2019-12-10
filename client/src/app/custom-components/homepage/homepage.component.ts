@@ -13,6 +13,9 @@ import {Observable} from 'rxjs';
 
 export class HomepageComponent implements OnInit, AfterViewInit {
 
+  artistsWithMostAlbums: Array<any>;
+  artistsWithMostBands: Array<any>;
+
   constructor(
     private zone: NgZone,
     public wasabiService: WasabiService,
@@ -22,13 +25,12 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-  }
-
-  /*initOscilloChart(divName: string, observable: Observable<any>) {
-    this.charts.oscilloChart = am4core.create(divName, am4charts.XYChart);
-
-    observable.subscribe(data => {
-      this.amChartsService.drawOscilloChart(this.charts.oscilloChart, data);
+    this.wasabiService.getArtistsWithMostAlbums().subscribe(data => {
+      this.artistsWithMostAlbums = data;
     });
-  }*/
+
+    this.wasabiService.getArtistsWithMostBands().subscribe(data => {
+      this.artistsWithMostBands = data;
+    });
+  }
 }
