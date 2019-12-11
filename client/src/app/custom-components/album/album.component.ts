@@ -13,16 +13,16 @@ import {Title} from '@angular/platform-browser';
 })
 
 export class AlbumComponent implements OnInit, AfterViewInit {
-  private albumDetails;
-  private artistName;
-  private albumName;
-  private songsUrls = [];
-  private clickEventLecture: Subject<any> = new Subject();
-  private isLecture = false;
-  private pageSize = 5;
-  private nbSongs = 0;
-  private currentPage = 1;
-  private songListDisplayed = [];
+  albumDetails;
+  artistName;
+  albumName;
+  songsUrls = [];
+  clickEventLecture: Subject<any> = new Subject();
+  isLecture = false;
+  pageSize = 5;
+  nbSongs = 0;
+  currentPage = 1;
+  songListDisplayed = [];
 
   constructor(private wasabiService: WasabiService,
               private ngxService: NgxUiLoaderService,
