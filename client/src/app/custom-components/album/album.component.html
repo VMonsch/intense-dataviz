@@ -1,6 +1,6 @@
 <div class="albumCard">
   <div class="leftCard">
-    <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar" (click)="onClickAlbum(albumDetails)">
+    <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar">
   </div>
   <div class="rightCard">
     <h1 *ngIf="albumDetails!== undefined">{{albumDetails.name}}</h1>
