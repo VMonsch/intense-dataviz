@@ -30,6 +30,7 @@
   z-index: 0;
 }
 
+
 .hero-text {
   text-align: center;
   position: absolute;
@@ -39,7 +40,37 @@
   color: white;
 }
 
-#comparison-charts {
+.albumsGallery{
+  z-index: 1;
+  background-color: white;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.albumCard{
+  display: inline-block;
+  text-align: center;
+  padding: 5px;
+  text-decoration: none;
+}
+
+.albumCard > img{
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.albumTitle{
+  color: black;
+  font-size: 14px;
+}
+
+.albumGenre{
+  color: gray;
+  font-size: 10px;
+}
+
+#artist-charts {
   margin-top: 3rem;
 }
 

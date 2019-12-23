@@ -7,6 +7,8 @@ import * as am4core from '@amcharts/amcharts4/core';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ArtistModel} from '../../model/ArtistModel';
 import {forkJoin, Observable} from 'rxjs';
+import {Title} from '@angular/platform-browser';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-comparison',
@@ -27,6 +29,7 @@ export class ComparisonComponent implements OnInit {
   constructor(private wasabiService: WasabiService,
               private amChartsService: AmchartsService,
               private ngxService: NgxUiLoaderService,
+              private titleService: Title,
               private router: Router,
               private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -37,6 +40,8 @@ export class ComparisonComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle(this.firstArtist.name + ' VS ' + this.secondArtist.name + ' - ' + environment.appName);
+
     this.ngxService.start();
 
     forkJoin(
