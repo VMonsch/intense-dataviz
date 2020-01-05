@@ -1,6 +1,7 @@
 import {Injectable, OnChanges, SimpleChanges} from '@angular/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
+import * as am4wordCloud from '@amcharts/amcharts4/plugins/wordCloud';
 
 @Injectable({
   providedIn: 'root'
@@ -246,4 +247,20 @@ export class AmchartsService {
 
   }
 
+
+  drawWordCloud(wordCloud: am4wordCloud.WordCloud, words: string) {
+    const series = wordCloud.series.push(new am4wordCloud.WordCloudSeries());
+
+    series.accuracy = 4;
+    series.step = 15;
+    series.rotationThreshold = 0.7;
+    series.maxCount = 200;
+    series.minWordLength = 2;
+    series.labels.template.tooltipText = '{word}: {value}';
+    series.fontFamily = 'Courier New';
+    series.minFontSize = am4core.percent(10);
+    series.maxFontSize = am4core.percent(30);
+
+    series.text = words;
+  }
 }

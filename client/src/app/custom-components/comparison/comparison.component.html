@@ -20,21 +20,15 @@
   <div id="artist-charts">
     <ngb-tabset [destroyOnHide]="false" class="mt-5" type="pills" justify="center">
       <ngb-tab>
+        <ng-template ngbTabTitle>Word cloud</ng-template>
+        <ng-template ngbTabContent>
+          <div id="word-cloud" class="wordCloud-chart"></div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab>
         <ng-template ngbTabTitle>Genres</ng-template>
         <ng-template ngbTabContent>
           <div id="kind-of-albums" class="pie-chart"></div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab>
-        <ng-template ngbTabTitle>Members' timeline</ng-template>
-        <ng-template ngbTabContent>
-          <div id="dumbell-plot-for-life-duration-brand" class="dumbellPlot-chart"></div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab>
-        <ng-template ngbTabTitle>Members' writing contribution</ng-template>
-        <ng-template ngbTabContent>
-          <div id="stacked-artist-contribution" class="stacked-chart"></div>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>

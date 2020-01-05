@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AmchartsService} from '../../service/amcharts.service';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
+import * as am4wordCloud from '@amcharts/amcharts4/plugins/wordCloud';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ArtistModel} from '../../model/ArtistModel';
 import {forkJoin, Observable} from 'rxjs';
@@ -16,14 +17,13 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./comparison.component.css']
 })
 
-export class ComparisonComponent implements OnInit {
+export class ComparisonComponent implements OnInit, AfterViewInit {
 
   firstArtist = new ArtistModel();
   secondArtist = new ArtistModel();
-  charts = {
-    donutOfAlbumGenre: new am4charts.PieChart(),
-    dumbellPlotDurationLife : new am4charts.XYChart(),
-    artistContribution : new am4charts.XYChart()
+  wordCloud: am4wordCloud.WordCloud;
+  chartsrender = {
+    wordCloud: false
   };
 
   constructor(private wasabiService: WasabiService,
@@ -47,7 +47,22 @@ export class ComparisonComponent implements OnInit {
     forkJoin(
       this.fetchArtist(this.firstArtist),
       this.fetchArtist(this.secondArtist)
-    ).subscribe(completion => this.ngxService.stop());
+    ).subscribe(completion => {
+      if (document.getElementById('word-cloud') !== null) {
+        this.initWordCloud( 'word-cloud');
+        this.chartsrender.wordCloud = true;
+      }
+      this.ngxService.stop();
+    });
+  }
+
+  ngAfterViewInit() {
+    if (this.firstArtist !== undefined && this.secondArtist !== undefined) {
+      if (!this.chartsrender.wordCloud) {
+        this.initWordCloud('word-cloud');
+        this.chartsrender.wordCloud = true;
+      }
+    }
   }
 
   fetchArtist(artist: ArtistModel): Observable<any> {
@@ -68,4 +83,34 @@ export class ComparisonComponent implements OnInit {
     this.router.navigate(['/artist', album.name, 'album', album.title]);
   }
 
+  initWordCloud(divName: string) {
+    this.wordCloud = am4core.create(divName, am4wordCloud.WordCloud);
+
+    this.amChartsService.drawWordCloud(this.wordCloud, this.getWords());
+  }
+
+  private getWords(): string {
+    let words = '';
+
+    words = words.concat(this.getWordsForArtist(this.firstArtist));
+    words = words.concat(this.getWordsForArtist(this.secondArtist));
+
+    return words;
+  }
+
+  private getWordsForArtist(artist: ArtistModel): string {
+    let words = '';
+
+    words = words.concat(' ', artist.name);
+
+    artist.members.forEach(member => words.concat(' ', member.name));
+
+    artist.albums.forEach(album => {
+      words = words.concat(' ', album.name);
+      words = words.concat(' ', album.title);
+      words = words.concat(' ', album.genre);
+    });
+
+    return words;
+  }
 }
