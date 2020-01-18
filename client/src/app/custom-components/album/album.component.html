@@ -3,7 +3,8 @@
     <img [src]=" albumDetails!=undefined && albumDetails.cover!= undefined ?albumDetails.cover.big:'/assets/album-default-cover.jpg'" alt="Avatar">
   </div>
   <div class="rightCard">
-    <h1 *ngIf="albumDetails!== undefined">{{albumDetails.name}}</h1>
+    <h1 *ngIf="albumName!== undefined">{{albumName}}</h1>
+    <h5 *ngIf="albumDetails!== undefined">{{albumDetails.name}}</h5>
     <div id="albumLegend" *ngIf="albumDetails!== undefined">
       <p class="legends" *ngIf="nbSongs">{{nbSongs}} titres</p>
       <p class="legends" *ngIf="albumDetails.genre">{{albumDetails.genre}}</p>
