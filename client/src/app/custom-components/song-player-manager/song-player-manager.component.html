@@ -15,9 +15,17 @@
   </tbody>
 </table>
 <div class="pagination">
-<button type="button" class="btn btn-primary btn-sm" (click)="onPrevPage()">< Precedent </button>
-  <div>{{currentPage}}</div>
-<button type="button" class="btn btn-primary btn-sm" (click)="onNextPage()">Suivant ></button>
+  <div class="btn-group btn-group-toggle">
+    <label class="btn-dark" ngbButtonLabel>
+      <input type="checkbox" ngbButton (click)="onPrevPage()" ><<
+    </label>
+    <label class="btn-light" ngbButtonLabel>
+      <input type="checkbox" ngbButton> {{currentPage}}
+    </label>
+    <label class="btn-dark" ngbButtonLabel>
+      <input type="checkbox" ngbButton (click)="onNextPage()">>>
+    </label>
+  </div>
 </div>
 
 
