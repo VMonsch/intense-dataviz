@@ -9,6 +9,9 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ArtistModel} from '../../model/ArtistModel';
 import {Title} from '@angular/platform-browser';
 import {environment} from '../../../environments/environment';
+import {faCompress, faCompressArrowsAlt} from '@fortawesome/free-solid-svg-icons';
+import {Observable, of} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-artist',
@@ -22,6 +25,8 @@ export class ArtistComponent implements OnInit, AfterViewInit {
   donutOfAlbumGenre: am4charts.PieChart;
   dumbellPlotDurationLife: am4charts.XYChart;
   artistContribution: am4charts.XYChart;
+  searchIcon = faCompressArrowsAlt;
+  searchText: string;
   chartsrender = {
     donut: false,
     dumbell: false,
@@ -123,5 +128,22 @@ export class ArtistComponent implements OnInit, AfterViewInit {
 
   onClickAlbum(album) {
     this.router.navigate(['/artist', album.name, 'album', album.title]);
+  }
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term =>
+        this.wasabiService.getSearchWithAutoCompletion(term).pipe(
+          catchError(() => {
+            return of([]);
+          }))
+      ))
+
+  formatter = (result: ArtistModel) => result.name;
+
+  onSelectSearch(item) {
+    this.router.navigate(['/comparison', this.artist.name, 'versus', item.name]);
   }
 }
