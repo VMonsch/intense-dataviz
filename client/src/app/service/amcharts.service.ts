@@ -12,8 +12,7 @@ import {ArtistModel} from '../model/ArtistModel';
 
 export class AmchartsService {
 
-  constructor() {
-  }
+  constructor() { }
 
   drawColumnChart(columnChart: am4charts.XYChart, data: Array<any> = []) {
     data.forEach(artist => {
@@ -270,6 +269,167 @@ export class AmchartsService {
     series.text = words;
   }
 
+  drawDoubleGauge(gaugeChart: am4charts.GaugeChart, firstValueLegend: string, firstValue: number, secondValueLegend: string, secondValue: number) {
+    gaugeChart.hiddenState.properties.opacity = 0;
+
+    // @ts-ignore
+    const axis = gaugeChart.xAxes.push(new am4charts.ValueAxis());
+    axis.min = 0;
+    axis.max = firstValue * Math.random() * 10;
+    axis.strictMinMax = true;
+    axis.renderer.inside = true;
+    // axis.renderer.ticks.template.inside = true;
+    // axis.stroke = chart.colors.getIndex(3);
+    axis.renderer.radius = am4core.percent(97);
+    // axis.renderer.radius = 80;
+    axis.renderer.line.strokeOpacity = 1;
+    axis.renderer.line.strokeWidth = 5;
+    axis.renderer.line.stroke = gaugeChart.colors.getIndex(0);
+    axis.renderer.ticks.template.disabled = false;
+    axis.renderer.ticks.template.stroke = gaugeChart.colors.getIndex(0);
+    axis.renderer.labels.template.radius = 35;
+    axis.renderer.ticks.template.strokeOpacity = 1;
+    axis.renderer.grid.template.disabled = true;
+    axis.renderer.ticks.template.length = 10;
+    axis.hiddenState.properties.opacity = 1;
+    axis.hiddenState.properties.visible = true;
+    axis.setStateOnChildren = true;
+    axis.renderer.hiddenState.properties.endAngle = 180;
+
+    // @ts-ignore
+    const axis2 = gaugeChart.xAxes.push(new am4charts.ValueAxis());
+    axis2.min = 0;
+    axis2.max = secondValue * Math.random() * 10;
+    axis2.strictMinMax = true;
+
+    axis2.renderer.line.strokeOpacity = 1;
+    axis2.renderer.line.strokeWidth = 5;
+    axis2.renderer.line.stroke = gaugeChart.colors.getIndex(3);
+    axis2.renderer.ticks.template.stroke = gaugeChart.colors.getIndex(3);
+
+    axis2.renderer.ticks.template.disabled = false;
+    axis2.renderer.ticks.template.strokeOpacity = 1;
+    axis2.renderer.grid.template.disabled = true;
+    axis2.renderer.ticks.template.length = 10;
+    axis2.hiddenState.properties.opacity = 1;
+    axis2.hiddenState.properties.visible = true;
+    axis2.setStateOnChildren = true;
+    axis2.renderer.hiddenState.properties.endAngle = 180;
+
+    const hand = gaugeChart.hands.push(new am4charts.ClockHand());
+    hand.fill = axis.renderer.line.stroke;
+    hand.stroke = axis.renderer.line.stroke;
+    hand.axis = axis;
+    hand.pin.radius = 14;
+    hand.startWidth = 10;
+
+    const hand2 = gaugeChart.hands.push(new am4charts.ClockHand());
+    hand2.fill = axis2.renderer.line.stroke;
+    hand2.stroke = axis2.renderer.line.stroke;
+    hand2.axis = axis2;
+    hand2.pin.radius = 10;
+    hand2.startWidth = 10;
+
+    const legend = new am4charts.Legend();
+    legend.isMeasured = false;
+    legend.y = am4core.percent(100);
+    legend.verticalCenter = 'bottom';
+    legend.parent = gaugeChart.chartContainer;
+    legend.data = [{
+      name: firstValueLegend,
+      fill: gaugeChart.colors.getIndex(0)
+    }, {
+      name: secondValueLegend,
+      fill: gaugeChart.colors.getIndex(3)
+    }];
+
+    legend.itemContainers.template.events.on('hit', ev => {
+      const index = ev.target.dataItem.index;
+
+      if (!ev.target.isActive) {
+        gaugeChart.hands.getIndex(index).hide();
+        gaugeChart.xAxes.getIndex(index).hide();
+        labelList.getIndex(index).hide();
+      } else {
+        gaugeChart.hands.getIndex(index).show();
+        gaugeChart.xAxes.getIndex(index).show();
+        labelList.getIndex(index).show();
+      }
+    });
+
+    const labelList = new am4core.ListTemplate(new am4core.Label());
+    labelList.template.isMeasured = false;
+    labelList.template.background.strokeWidth = 2;
+    labelList.template.fontSize = 25;
+    labelList.template.padding(10, 20, 10, 20);
+    labelList.template.y = am4core.percent(50);
+    labelList.template.horizontalCenter = 'middle';
+
+    const label = labelList.create();
+    label.parent = gaugeChart.chartContainer;
+    label.x = am4core.percent(40);
+    label.background.stroke = gaugeChart.colors.getIndex(0);
+    label.fill = gaugeChart.colors.getIndex(0);
+    label.text = '0';
+
+    const label2 = labelList.create();
+    label2.parent = gaugeChart.chartContainer;
+    label2.x = am4core.percent(60);
+    label2.background.stroke = gaugeChart.colors.getIndex(3);
+    label2.fill = gaugeChart.colors.getIndex(3);
+    label2.text = '0';
+
+    hand.showValue(firstValue, 1000, am4core.ease.cubicOut);
+    label.text = Math.round(hand.value).toString();
+    hand2.showValue(secondValue, 1000, am4core.ease.cubicOut);
+    label2.text = Math.round(hand2.value).toString();
+  }
+
+  /*drawGradientGauge(gaugeChart: am4charts.GaugeChart, firstValueLegend: string, firstValue: number, secondValueLegend: string, secondValue: number) {
+    gaugeChart.innerRadius = -15;
+
+    // @ts-ignore
+    const axis = gaugeChart.xAxes.push(new am4charts.ValueAxis());
+    axis.min = 0;
+    axis.max = firstValue + secondValue;
+    axis.strictMinMax = true;
+
+    const colorSet = new am4core.ColorSet();
+    const gradient = new am4core.LinearGradient();
+    gradient.stops.push({color: am4core.color('red')});
+    gradient.stops.push({color: am4core.color('yellow')});
+    gradient.stops.push({color: am4core.color('green')});
+
+    axis.renderer.line.stroke = gradient;
+    axis.renderer.line.strokeWidth = 15;
+    axis.renderer.line.strokeOpacity = 1;
+
+    axis.renderer.grid.template.disabled = true;
+
+    const firstHand = gaugeChart.hands.push(new am4charts.ClockHand());
+    firstHand.radius = am4core.percent(firstValue / axis.max * 100);
+    firstHand.fill = am4core.color('blue');
+    firstHand.showValue(firstValue);
+
+    const secondHand = gaugeChart.hands.push(new am4charts.ClockHand());
+    secondHand.radius = am4core.percent(secondValue / axis.max * 100);
+    secondHand.fill = am4core.color('purple');
+    secondHand.showValue(secondValue);
+
+    const legend = new am4charts.Legend();
+    legend.isMeasured = false;
+    legend.y = am4core.percent(100);
+    legend.verticalCenter = 'bottom';
+    legend.parent = gaugeChart.chartContainer;
+    legend.data = [{
+      name: firstValueLegend,
+      fill: am4core.color('blue')
+    }, {
+      name: secondValueLegend,
+      fill: am4core.color('purple')
+    }];
+  }*/
+
 
   drawTimeLineComparator(chart: am4timeline.CurveChart, firstArtist: ArtistModel, secondArtist: ArtistModel) {
 
@@ -434,7 +594,7 @@ function setTimelineData(chart: am4timeline.CurveChart, firstArtist: ArtistModel
   firstArtist.albums.forEach(album => {
       const data = {category: null, icon: null, start: null, end: null, color: null, text: ''};
       data.category = '';
-      if(album.publicationDate != null ){
+      if (album.publicationDate != null ) {
         data.start = album.publicationDate;
         data.end = album.publicationDate;
       }
@@ -447,7 +607,7 @@ function setTimelineData(chart: am4timeline.CurveChart, firstArtist: ArtistModel
   secondArtist.albums.forEach(album => {
       const data = {category: null, icon: null, start: null, end: null, color: null, text: ''};
       data.category = '';
-    if(album.publicationDate != null ){
+      if (album.publicationDate != null ) {
       data.start = album.publicationDate;
       data.end = album.publicationDate;
     }

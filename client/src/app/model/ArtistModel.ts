@@ -5,4 +5,5 @@ export class ArtistModel {
   members: [any];
   collectionSize;
   moreInfo: string;
+  deezerFans: number;
 }

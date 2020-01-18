@@ -29,23 +29,23 @@
   <div id="artist-charts">
     <ngb-tabset [destroyOnHide]="false" class="mt-5" type="pills" justify="center">
       <ngb-tab>
-        <ng-template ngbTabTitle>Timeline</ng-template>
-        <ng-template ngbTabContent>
-          <div id="timelineComparator" class="timeline-chart"></div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab>
         <ng-template ngbTabTitle>Word cloud</ng-template>
         <ng-template ngbTabContent>
-          <div id="word-cloud" class="wordCloud-chart"></div>
+          <div id="word-cloud" class="word-cloud"></div>
         </ng-template>
       </ngb-tab>
       <ngb-tab>
-        <ng-template ngbTabTitle>Genres</ng-template>
+        <ng-template ngbTabTitle>Deezer fans</ng-template>
         <ng-template ngbTabContent>
-          <div id="kind-of-albums" class="pie-chart"></div>
+          <div id="deezer-fans-counter" class="gauge"></div>
         </ng-template>
       </ngb-tab>
+      <ngb-tab>
+      <ng-template ngbTabTitle>Timeline</ng-template>
+      <ng-template ngbTabContent>
+        <div id="timeline-comparator" class="timeline"></div>
+      </ng-template>
+    </ngb-tab>
     </ngb-tabset>
   </div>
 </div>

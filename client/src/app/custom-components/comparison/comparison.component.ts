@@ -24,8 +24,11 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   secondArtist = new ArtistModel();
   wordCloud: am4wordCloud.WordCloud;
   timelineComparator: am4timeline.CurveChart;
+  gradientGauge: am4charts.GaugeChart;
   chartsrender = {
-    wordCloud: false
+    wordCloud: false,
+    gradientGauge: false,
+    timelineComparator: false
   };
 
   constructor(private wasabiService: WasabiService,
@@ -50,11 +53,18 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
       this.fetchArtist(this.firstArtist),
       this.fetchArtist(this.secondArtist)
     ).subscribe(completion => {
-      if (document.getElementById('word-cloud') !== null) {
+      if (document.getElementById('word-cloud') !== undefined) {
         this.initWordCloud( 'word-cloud');
         this.chartsrender.wordCloud = true;
       }
-
+      if (document.getElementById('deezer-fans-counter') !== undefined) {
+        this.initDeezerFansGauge('deezer-fans-counter');
+        this.chartsrender.gradientGauge = true;
+      }
+      if (document.getElementById('timeline-comparator') !== undefined) {
+        this.initTimelineComparator( 'timeline-comparator');
+        this.chartsrender.wordCloud = true;
+      }
       this.ngxService.stop();
     });
   }
@@ -63,7 +73,14 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     if (this.firstArtist !== undefined && this.secondArtist !== undefined) {
       if (!this.chartsrender.wordCloud) {
         this.initWordCloud('word-cloud');
-        this.initTimelineComparator('timelineComparator');
+        this.chartsrender.wordCloud = true;
+      }
+      if (!this.chartsrender.gradientGauge) {
+        this.initDeezerFansGauge('deezer-fans-counter');
+        this.chartsrender.gradientGauge = true;
+      }
+      if (!this.chartsrender.timelineComparator) {
+        this.initTimelineComparator( 'timeline-comparator');
         this.chartsrender.wordCloud = true;
       }
     }
@@ -73,12 +90,12 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     const observable = this.wasabiService.getArtistByName(artist.name);
 
     observable.subscribe(data => {
-      console.log(data);
       artist.albums = data.albums;
       artist.picture = data.picture.xl;
       artist.collectionSize = data.albums.length;
       artist.members = data.members;
       artist.moreInfo = data.urlWikipedia;
+      artist.deezerFans = data.deezerFans;
     });
 
     return observable;
@@ -94,9 +111,14 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     this.amChartsService.drawWordCloud(this.wordCloud, this.getWords());
   }
 
+  initDeezerFansGauge(divName: string) {
+    this.gradientGauge = am4core.create(divName, am4charts.GaugeChart);
+    this.amChartsService.drawDoubleGauge(this.gradientGauge, this.firstArtist.name, this.firstArtist.deezerFans, this.secondArtist.name, this.secondArtist.deezerFans);
+  }
+
   initTimelineComparator(divName: string) {
       this.timelineComparator = am4core.create(divName, am4timeline.CurveChart);
-      this.amChartsService.drawTimeLineComparator(this.timelineComparator,this.firstArtist,this.secondArtist);
+      this.amChartsService.drawTimeLineComparator(this.timelineComparator, this.firstArtist, this.secondArtist);
   }
 
 

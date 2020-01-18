@@ -3,7 +3,7 @@
   height: 300px;
 }
 
-.timeline-chart{
+.timeline{
   width: 100%;
   height: 350px;
 }
@@ -97,7 +97,11 @@
   margin-top: 3rem;
 }
 
-#word-cloud {
+.word-cloud {
   margin-top : 3%;
+}
+
+.gauge {
+  height: 500px;
 }
 
