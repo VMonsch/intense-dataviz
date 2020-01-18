@@ -5,6 +5,7 @@ import {AmchartsService} from '../../service/amcharts.service';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4wordCloud from '@amcharts/amcharts4/plugins/wordCloud';
+import * as am4timeline from '@amcharts/amcharts4/plugins/timeline';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ArtistModel} from '../../model/ArtistModel';
 import {forkJoin, Observable} from 'rxjs';
@@ -22,6 +23,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   firstArtist = new ArtistModel();
   secondArtist = new ArtistModel();
   wordCloud: am4wordCloud.WordCloud;
+  timelineComparator: am4timeline.CurveChart;
   chartsrender = {
     wordCloud: false
   };
@@ -52,6 +54,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
         this.initWordCloud( 'word-cloud');
         this.chartsrender.wordCloud = true;
       }
+
       this.ngxService.stop();
     });
   }
@@ -60,6 +63,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     if (this.firstArtist !== undefined && this.secondArtist !== undefined) {
       if (!this.chartsrender.wordCloud) {
         this.initWordCloud('word-cloud');
+        this.initTimelineComparator('timelineComparator');
         this.chartsrender.wordCloud = true;
       }
     }
@@ -69,6 +73,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     const observable = this.wasabiService.getArtistByName(artist.name);
 
     observable.subscribe(data => {
+      console.log(data);
       artist.albums = data.albums;
       artist.picture = data.picture.xl;
       artist.collectionSize = data.albums.length;
@@ -88,6 +93,12 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
     this.amChartsService.drawWordCloud(this.wordCloud, this.getWords());
   }
+
+  initTimelineComparator(divName: string) {
+      this.timelineComparator = am4core.create(divName, am4timeline.CurveChart);
+      this.amChartsService.drawTimeLineComparator(this.timelineComparator,this.firstArtist,this.secondArtist);
+  }
+
 
   private getWords(): string {
     let words = '';
