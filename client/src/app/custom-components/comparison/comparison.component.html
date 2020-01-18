@@ -16,11 +16,6 @@
   <a class="btn btn-light m-2" [routerLink]="['/artist', firstArtist.name]" role="button">View only {{firstArtist.name.replace("%20", " ")}}</a>
   <a class="btn btn-light m-2" [routerLink]="['/artist', secondArtist.name]" role="button">View only {{secondArtist.name.replace("%20", " ")}}</a>
 </div>
-
-
-<div id="timelineComparator" class="dumbellPlot-chart"></div>
-
-
 <div>
   <!--
   <div class="albumsGallery">
@@ -36,7 +31,7 @@
       <ngb-tab>
         <ng-template ngbTabTitle>Timeline</ng-template>
         <ng-template ngbTabContent>
-
+          <div id="timelineComparator" class="timeline-chart"></div>
         </ng-template>
       </ngb-tab>
       <ngb-tab>
