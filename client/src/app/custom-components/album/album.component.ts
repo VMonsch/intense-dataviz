@@ -66,24 +66,18 @@ export class AlbumComponent implements OnInit, AfterViewInit {
   }
 
   eventChildOnChangePage(event): void {
-    this.currentPage = this.currentPage + event;
-    this.songsUrls = [];
-    for (let start = (this.pageSize * this.currentPage) - this.pageSize ;
-         start < this.pageSize * this.currentPage && start < this.albumDetails.songs.length;
-         start++) {
+    if (this.currentPage + event > 0 && Math.ceil(this.albumDetails.songs.length / this.pageSize) >= this.currentPage + event) {
+      this.currentPage = this.currentPage + event;
+      this.songsUrls = [];
+      for (let start = (this.pageSize * this.currentPage) - this.pageSize;
+           start < this.pageSize * this.currentPage && start < this.albumDetails.songs.length;
+           start++) {
         this.songsUrls.push(this.wasabiService.getSongDetails(this.albumDetails.songs[start]._id));
 
-    }
-    forkJoin(this.songsUrls).subscribe(respList => {
-      this.songListDisplayed = respList;
-    });
-
-    if (this.currentPage === 1) {
-
-    } else if (this.currentPage === Math.ceil(this.albumDetails.songs.length / this.pageSize)) {
-
-    } else {
-
+      }
+      forkJoin(this.songsUrls).subscribe(respList => {
+        this.songListDisplayed = respList;
+      });
     }
   }
 
