@@ -275,7 +275,7 @@ export class AmchartsService {
     // @ts-ignore
     const axis = gaugeChart.xAxes.push(new am4charts.ValueAxis());
     axis.min = 0;
-    axis.max = firstValue * Math.random() * 10;
+    axis.max = firstValue * (Math.random() + 1) * (Math.random() + 1);
     axis.strictMinMax = true;
     axis.renderer.inside = true;
     // axis.renderer.ticks.template.inside = true;
@@ -299,7 +299,7 @@ export class AmchartsService {
     // @ts-ignore
     const axis2 = gaugeChart.xAxes.push(new am4charts.ValueAxis());
     axis2.min = 0;
-    axis2.max = secondValue * Math.random() * 10;
+    axis2.max = secondValue * (Math.random() + 1) * (Math.random() + 1);
     axis2.strictMinMax = true;
 
     axis2.renderer.line.strokeOpacity = 1;
