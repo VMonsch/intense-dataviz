@@ -53,15 +53,15 @@ export class ComparisonComponent implements OnInit, AfterViewInit, AfterViewChec
       this.fetchArtist(this.firstArtist),
       this.fetchArtist(this.secondArtist)
     ).subscribe(completion => {
-      if (document.getElementById('word-cloud') !== undefined) {
+      if (document.getElementById('word-cloud') !== null) {
         this.initWordCloud( 'word-cloud');
         this.chartsrender.wordCloud = true;
       }
-      if (document.getElementById('deezer-fans-counter') !== undefined) {
+      if (document.getElementById('deezer-fans-counter') !== null) {
         this.initDeezerFansGauge('deezer-fans-counter');
         this.chartsrender.gradientGauge = true;
       }
-      if (document.getElementById('timeline-comparator') !== undefined) {
+      if (document.getElementById('timeline-comparator') !== null) {
         this.initTimelineComparator( 'timeline-comparator');
         this.chartsrender.wordCloud = true;
       }
