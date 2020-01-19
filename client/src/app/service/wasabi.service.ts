@@ -68,7 +68,6 @@ export class WasabiService {
           }
           succes = true;
         } catch (e) {
-          console.log('Local Storage is full, Please empty data');
           localStorage.clear();
         }
       }

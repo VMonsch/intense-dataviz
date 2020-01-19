@@ -276,6 +276,8 @@ export class AmchartsService {
     const axis = gaugeChart.xAxes.push(new am4charts.ValueAxis());
     axis.min = 0;
     axis.max = firstValue * (Math.random() + 1) * (Math.random() + 1);
+
+    axis.renderer.minGridDistance = 20;
     axis.strictMinMax = true;
     axis.renderer.inside = true;
     // axis.renderer.ticks.template.inside = true;
@@ -302,6 +304,7 @@ export class AmchartsService {
     axis2.max = secondValue * (Math.random() + 1) * (Math.random() + 1);
     axis2.strictMinMax = true;
 
+    axis2.renderer.minGridDistance = 20;
     axis2.renderer.line.strokeOpacity = 1;
     axis2.renderer.line.strokeWidth = 5;
     axis2.renderer.line.stroke = gaugeChart.colors.getIndex(3);
@@ -602,7 +605,6 @@ function setTimelineData(chart: am4timeline.CurveChart, firstArtist: ArtistModel
   const secondArtistColor = colorSet.getIndex(17);
 
   chart.data = [];
-  console.log(firstArtist);
   firstArtist.albums.forEach(album => {
       const data = {category: null, icon: null, start: null, end: null, color: null, text: ''};
       data.category = '';
