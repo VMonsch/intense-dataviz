@@ -55,11 +55,22 @@ export class WasabiService {
     }
 
     observableResponse.subscribe(data => {
-      if (key != null && localStorage.getItem(key) === null) {
-        localStorage.setItem(key, JSON.stringify(data));
-      } else if (key != null) {
-        localStorage.removeItem(key);
-        localStorage.setItem(key, JSON.stringify(data));
+      let count = 0;
+      let succes = false;
+      while(count < 3 || !succes) {
+        count++;
+        try {
+          if (key != null && localStorage.getItem(key) === null) {
+            localStorage.setItem(key, JSON.stringify(data));
+          } else if (key != null) {
+            localStorage.removeItem(key);
+            localStorage.setItem(key, JSON.stringify(data));
+          }
+          succes = true;
+        } catch (e) {
+          console.log('Local Storage is full, Please empty data');
+          localStorage.clear();
+        }
       }
       this.serializeQuery(url, data);
     });

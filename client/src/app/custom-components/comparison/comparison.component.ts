@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {WasabiService} from '../../service/wasabi.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AmchartsService} from '../../service/amcharts.service';
@@ -18,7 +18,7 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./comparison.component.css']
 })
 
-export class ComparisonComponent implements OnInit, AfterViewInit {
+export class ComparisonComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   firstArtist = new ArtistModel();
   secondArtist = new ArtistModel();
@@ -107,7 +107,6 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
   initWordCloud(divName: string) {
     this.wordCloud = am4core.create(divName, am4wordCloud.WordCloud);
-
     this.amChartsService.drawWordCloud(this.wordCloud, this.getWords());
   }
 
@@ -146,4 +145,8 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
     return words;
   }
+
+  ngAfterViewChecked(): void {
+  }
+
 }

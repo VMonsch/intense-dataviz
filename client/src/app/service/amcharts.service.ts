@@ -473,8 +473,20 @@ export class AmchartsService {
     dateAxis.tooltip.label.paddingTop = 7;
     dateAxis.endLocation = 0;
     dateAxis.startLocation = -0.5;
-    dateAxis.min = new Date(1980, 0, 9, 23, 55).getTime();
-    dateAxis.max = new Date(2015, 0, 11, 7, 10).getTime();
+
+    let dateMin = null;
+    let dateMax = null;
+    chart.data.forEach(e => {
+
+      if (e.start !== '' && e.start < dateMin || dateMin === null) {
+        dateMin = +e.start;
+      } else if (e.end > dateMax || dateMax === null) {
+        dateMax = +e.end;
+      }
+    });
+
+    dateAxis.min = new Date(dateMin, 0, 0, 0, 0).getTime();
+    dateAxis.max = new Date(dateMax, 0, 0, 0, 0).getTime();
 
     const labelTemplate = dateAxis.renderer.labels.template;
     labelTemplate.verticalCenter = 'middle';
