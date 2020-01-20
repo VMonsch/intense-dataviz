@@ -28,6 +28,7 @@ export class WasabiService {
   }
 
   getArtistByName(artistName: string): Observable<any> {
+    artistName = encodeURIComponent(artistName);
     const url = this.root + this.apiRoute + '/artist_all/name/' + artistName;
     return this.executeQuery(url, artistName);
   }
