@@ -277,7 +277,7 @@ export class AmchartsService {
     axis.min = 0;
     axis.max = firstValue * (Math.random() + 1) * (Math.random() + 1);
 
-    axis.renderer.minGridDistance = 20;
+    axis.renderer.minGridDistance = 100;
     axis.strictMinMax = true;
     axis.renderer.inside = true;
     // axis.renderer.ticks.template.inside = true;
@@ -304,7 +304,7 @@ export class AmchartsService {
     axis2.max = secondValue * (Math.random() + 1) * (Math.random() + 1);
     axis2.strictMinMax = true;
 
-    axis2.renderer.minGridDistance = 20;
+    axis2.renderer.minGridDistance = 100;
     axis2.renderer.line.strokeOpacity = 1;
     axis2.renderer.line.strokeWidth = 5;
     axis2.renderer.line.stroke = gaugeChart.colors.getIndex(3);

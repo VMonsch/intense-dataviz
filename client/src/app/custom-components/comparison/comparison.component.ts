@@ -71,10 +71,10 @@ export class ComparisonComponent implements OnInit, AfterViewInit, AfterViewChec
 
   ngAfterViewInit() {
     if (this.firstArtist !== undefined && this.secondArtist !== undefined) {
-      if (!this.chartsrender.wordCloud) {
+      /*if (!this.chartsrender.wordCloud) {
         this.initWordCloud('word-cloud');
         this.chartsrender.wordCloud = true;
-      }
+      }*/
       if (!this.chartsrender.gradientGauge) {
         this.initDeezerFansGauge('deezer-fans-counter');
         this.chartsrender.gradientGauge = true;
