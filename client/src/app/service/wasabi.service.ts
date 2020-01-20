@@ -57,7 +57,7 @@ export class WasabiService {
     observableResponse.subscribe(data => {
       let count = 0;
       let succes = false;
-      while(count < 3 || !succes) {
+      while(count < 3 && !succes) {
         count++;
         try {
           if (key != null && localStorage.getItem(key) === null) {
